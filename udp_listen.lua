@@ -1,5 +1,5 @@
 function listen(s, data)
-  ws2812.writergb(4, data)
+  apa102.write(1, 3, data)
 end
 
 

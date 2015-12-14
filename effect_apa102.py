@@ -20,8 +20,8 @@ ANIMATION_SPEED = 30.0 # in FPS
 TIME_PER_FRAME = 1/ANIMATION_SPEED
 
 PIXELS = 20
-BPP = 3
-BRIGHTNESS = 64.0
+BPP = 4
+BRIGHTNESS = 0x0F
 
 SIN_CHANGE_PER_TIME = 0.5
 SIN_CHANGE_PER_PX   = 3.0
@@ -30,30 +30,22 @@ SIN_SIZE_PER_STRIP  = 20.0
 bulbs = dict()
 
 def render(buf, i):
-    for x in range(0, PIXELS/2):
+    for x in range(0, PIXELS):
         hue = math.sin((i*SIN_CHANGE_PER_TIME + x*SIN_CHANGE_PER_PX) / SIN_SIZE_PER_STRIP)
         normalized_hue = (hue + 1.0) / 2 # Normalized to 0..1
         r,g,b = hsv_to_rgb(normalized_hue, 1.0, 1.0)
-        r = int(r * BRIGHTNESS)
-        g = int(g * BRIGHTNESS)
-        b = int(b * BRIGHTNESS)
+        r = int(r * 255)
+        g = int(g * 255)
+        b = int(b * 255)
 
-        buf[x*BPP + 0] = g
-        buf[x*BPP + 1] = r
-        buf[x*BPP + 2] = b
-
-        x2 = PIXELS - x - 1
-        buf[x2*BPP + 0] = g
-        buf[x2*BPP + 1] = r
-        buf[x2*BPP + 2] = b
+        buf[x*BPP + 0] = BRIGHTNESS
+        buf[x*BPP + 1] = b
+        buf[x*BPP + 2] = g
+        buf[x*BPP + 3] = r
 
 
 def animate():
     timestamp = 0
-
-    # Set broadcast mode
-#    if hasattr(socket,'SO_BROADCAST'):
-#        sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
     while True:
         new_time = time.time()
@@ -68,7 +60,10 @@ def process_a_bulb(ip, timestamp, counter):
     data = bytearray(PIXELS * BPP)
     render(data, counter)
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
-    sock.sendto(bytes(data[0:60]), (ip, UDP_PORT))
+    sock.sendto(bytes(data[0:PIXELS * BPP]), (ip, UDP_PORT))
+    print "\nSending frames to %s:" % str(ip)
+    for x in range(0, PIXELS):
+      print "\t(%x, %x, %x, %x)" % (data[x*4+0], data[x*4+1], data[x*4+2], data[x*4+3])
     counter += 1
     bulbs[ip] = (timestamp, counter)
 
@@ -82,7 +77,6 @@ def process_all_bulbs():
         else:
             print "Removing stale bulb %s" % str(ip)
             del bulbs[ip]
-        
 
 
 def heartbeat(ip):
@@ -123,7 +117,7 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         os._exit(1)
-        
+
     except:
         print "Unexpected error:", sys.exc_info()[0]
         raise
