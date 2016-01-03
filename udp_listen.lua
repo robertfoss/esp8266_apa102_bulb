@@ -5,4 +5,4 @@ end
 
 sock=net.createServer(net.UDP) 
 sock:on("receive", listen)
-sock:listen(9999)
+sock:listen(UDP_LISTEN_PORT)

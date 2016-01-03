@@ -1,8 +1,12 @@
+UDP_BROADCAST_CONFIG = UDP_BROADCAST_CONFIG_PORT ..
+                       UDP_BROADCAST_CONFIG_NBR_LEDS ..
+                       UDP_BROADCAST_CONFIG_NBR_BYTES_PER_LED
+
 function broadcast()
   sock = net.createConnection(net.UDP, 0)
-  sock:connect(9998, '255.255.255.255')
-  sock:send(wifi.sta.getip(), function()
-    print('Broadcast local ip: ' .. wifi.sta.getip())
+  sock:connect(UDP_BROADCAST_PORT, '255.255.255.255')
+  sock:send(UDP_BROADCAST_CONFIG, function()
+    print('Broadcast')
   end)
 end
 
