@@ -9,19 +9,14 @@ from twisted.internet import protocol, reactor, endpoints
 from twisted.internet.protocol import DatagramProtocol
 from threading import Thread
 
-'''
-    This code is ugly and I know it.
-    - Konrad Beckmann
-'''
-
-UDP_PORT = 9999
+UDP_PORT = 10001
 BULB_TIME_TO_LIVE = 20
 ANIMATION_SPEED = 30.0 # in FPS
 TIME_PER_FRAME = 1/ANIMATION_SPEED
 
 PIXELS = 20
 BPP = 4
-BRIGHTNESS = 0x0F
+BRIGHTNESS = 0x0A
 
 SIN_CHANGE_PER_TIME = 0.5
 SIN_CHANGE_PER_PX   = 3.0
@@ -61,9 +56,9 @@ def process_a_bulb(ip, timestamp, counter):
     render(data, counter)
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
     sock.sendto(bytes(data[0:PIXELS * BPP]), (ip, UDP_PORT))
-    print "\nSending frames to %s:" % str(ip)
-    for x in range(0, PIXELS):
-      print "\t(%x, %x, %x, %x)" % (data[x*4+0], data[x*4+1], data[x*4+2], data[x*4+3])
+#    print "\nSending frames to %s:" % str(ip)
+#    for x in range(0, PIXELS):
+#      print "\t(%x, %x, %x, %x)" % (data[x*4+0], data[x*4+1], data[x*4+2], data[x*4+3])
     counter += 1
     bulbs[ip] = (timestamp, counter)
 
@@ -102,14 +97,13 @@ class HeartbeatReciever(DatagramProtocol):
 
 
     def datagramReceived(self, data, (ip, port)):
-        if (str(data) == ip):
           heartbeat(ip)
 
 
 if __name__ == "__main__":
     try:
         print("Starting up..")
-        reactor.listenMulticast(9998, HeartbeatReciever(), listenMultiple=True)
+        reactor.listenMulticast(10000, HeartbeatReciever(), listenMultiple=True)
         Thread(target=reactor.run, args=(False,)).start()
 
         while True:

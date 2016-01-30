@@ -1,11 +1,11 @@
 function u16_to_str(nbr)
-  byte0 = bit.band(bit.rshift(nbr, 0), 0xFF)
-  byte1 = bit.band(bit.rshift(nbr, 8), 0xFF)
+  local byte0 = bit.band(bit.rshift(nbr, 0), 0xFF)
+  local byte1 = bit.band(bit.rshift(nbr, 8), 0xFF)
   return string.char(byte0, byte1)
 end
 
 function u8_to_str(nbr)
-  byte0 = bit.band(nbr, 0xFF)
+  local byte0 = bit.band(nbr, 0xFF)
   return string.char(byte0)
 end
 
@@ -18,12 +18,11 @@ UDP_BROADCAST_CONFIG_NBR_BYTES_PER_LED = u8_to_str(4)
 
 function on_connect()
   print("Connected to wifi as: " .. wifi.sta.getip())
-  ssid,password,bssid_set,bssid = wifi.sta.getconfig()
+  local ssid,password,bssid_set,bssid = wifi.sta.getconfig()
   print(
       "\nCurrent Station configuration:"
     .."\nSSID : "..ssid
     .."\nPassword  : "..password
-    .."\nBSSID_set  : "..bssid_set
     .."\nBSSID: "..bssid.."\n"
   )
   dofile('udp_broadcast.lua')
