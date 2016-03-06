@@ -3,7 +3,7 @@
   (general
     (links 302)
     (no_connects 296)
-    (area 78.0316 71.860714 180.568401 173.3184)
+    (area 82.996992 76.749999 175.498858 168.255113)
     (thickness 1.6)
     (drawings 266)
     (tracks 21)
@@ -1560,7 +1560,7 @@
   )
 
   (module APA102:APA102 (layer F.Cu) (tedit 565C9BBA) (tstamp 565BD5FB)
-    (at 109.6 93.25 90)
+    (at 109.6 93.3 90)
     (path /565BA390)
     (fp_text reference LED38 (at 5.8 0 90) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.15)))
@@ -1741,7 +1741,7 @@
   )
 
   (module APA102:APA102 (layer F.Cu) (tedit 565C9BD7) (tstamp 565BD55B)
-    (at 135.55 93.25 90)
+    (at 135.55 93.3 90)
     (path /565BA378)
     (fp_text reference LED22 (at 5.9 0 90) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.15)))
@@ -1775,7 +1775,7 @@
   )
 
   (module APA102:APA102 (layer F.Cu) (tedit 565C9BD0) (tstamp 565BD583)
-    (at 129.1 93.25 90)
+    (at 129.1 93.3 90)
     (path /565BA37E)
     (fp_text reference LED26 (at 5.9 0 90) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.15)))
@@ -2126,7 +2126,7 @@
   )
 
   (module APA102:APA102 (layer F.Cu) (tedit 565C9BDE) (tstamp 565BD533)
-    (at 142.05 93.25 90)
+    (at 142.05 93.3 90)
     (path /565BA396)
     (fp_text reference LED18 (at 5.9 -0.1 90) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.15)))
@@ -2160,7 +2160,7 @@
   )
 
   (module APA102:APA102 (layer F.Cu) (tedit 565C9BEA) (tstamp 565BD50B)
-    (at 148.55 93.25 90)
+    (at 148.55 93.3 90)
     (path /565BA39C)
     (fp_text reference LED14 (at 5.8 -0.2 90) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.15)))
@@ -2209,7 +2209,7 @@
   )
 
   (module APA102:APA102 (layer F.Cu) (tedit 565C9BCA) (tstamp 565BD5AB)
-    (at 122.61 93.25 90)
+    (at 122.6 93.3 90)
     (path /565BA384)
     (fp_text reference LED30 (at 5.8 0 90) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.15)))
@@ -2243,7 +2243,7 @@
   )
 
   (module APA102:APA102 (layer F.Cu) (tedit 565C9BC3) (tstamp 565BD5D3)
-    (at 116.11 93.25 90)
+    (at 116.1 93.3 90)
     (path /565BA38A)
     (fp_text reference LED34 (at 5.9 0 90) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.15)))
