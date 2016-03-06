@@ -3,7 +3,7 @@
   (general
     (links 0)
     (no_connects 302)
-    (area 82.996992 76.749999 175.498858 168.255113)
+    (area 78.0316 71.860714 180.518401 173.1684)
     (thickness 1.6)
     (drawings 266)
     (tracks 1071)
@@ -88,7 +88,7 @@
       (mirror false)
       (drillshape 0)
       (scaleselection 1)
-      (outputdirectory output/))
+      (outputdirectory schematic/))
   )
 
   (net 0 "")
