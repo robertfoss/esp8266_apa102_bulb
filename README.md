@@ -17,6 +17,7 @@ ESP8266 based animated APA102 bulbs.
 ![Alt text](/../media/v2_running.jpg?raw=true "v2: Assembled and running over WiFi")
 ![Alt text](/../media/v2_hanging.jpg?raw=true "v2: Hanging and running over WiFi")
 
-## TODO
- * Improve button footprint, currently it is 1mm too high.
- * Remove GPIO16->RST, since data on GPIO16 will trigger a reset.
+## Changelog HW v4.0
+ * Reworked inter-pcb connections to minimize gap between leds.
+ * Changed APA102 -> GPIO pin mapping.
+ * Cost optimized board to fit within 10x10cm envelope.
