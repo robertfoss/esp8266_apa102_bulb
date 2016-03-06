@@ -3,7 +3,12 @@ ESP8266 based animated APA102 bulbs.
 
 ## Schematic ##
 
-![Alt text](/../media/schematic_v3.1.png?raw=true "v3.1: Schematic")
+![Alt text](/../media/v3.1_schematic.png?raw=true "v3.1: Schematic")
+
+
+## PCB model ##
+
+![Alt text](/../media/v2_3d_model.png?raw=true "v2: 3D model of the PCB")
 
 
 ## Assembled v2 hardware ##
