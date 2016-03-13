@@ -241,9 +241,6 @@
       (place P20 156400 -125600 front 90 (PN CONN_01X02))
       (place P21 149300 -125600 front 90 (PN CONN_01X02))
     )
-    (component "LEDs:LED-0603"
-      (place D1 101250 -134710 front 135 (PN LED_BLUE))
-    )
     (component Capacitors_SMD:C_0603
       (place C6 109800 -156300 front 180 (PN 10uF))
       (place C5 109800 -158000 front 0 (PN 100nF))
@@ -251,31 +248,37 @@
       (place C3 94550 -141440 front 90 (PN 10uF))
       (place C7 118650 -141400 front 90 (PN 22uF))
       (place C10 116650 -141380 front 90 (PN 22uF))
-      (place C8 115850 -139710 back 180 (PN 100uF))
-      (place C4 109000 -132150 back 180 (PN 100nF))
+      (place C8 115250 -139800 back 135 (PN 100uF))
+      (place C4 105650 -130500 back 135 (PN 100nF))
     )
     (component "Housings_DFN_QFN:QFN-28-1EP_5x5mm_Pitch0.5mm"
-      (place U1 99050 -152100 front 270 (PN CP2102))
+      (place U1 98750 -152250 front 270 (PN CP2102))
     )
     (component footprints:usb_micro_vertical
       (place P1 103816 -148959 front 45 (PN USB_OTG))
     )
     (component Resistors_SMD:R_0603
-      (place R6 106150 -129450 back 0 (PN 470))
-      (place R4 111250 -134600 back 0 (PN 12k))
-      (place R3 113350 -137100 back 180 (PN 12k))
-      (place R8 90850 -147600 back 180 (PN 470))
-      (place R1 92400 -149700 back 0 (PN 12k))
-      (place R7 105500 -128000 back 180 (PN 470))
-      (place R5 101150 -156610 back 180 (PN 12k))
-      (place R2 94150 -151850 back 0 (PN 12k))
-      (place R9 112500 -152700 back 180 (PN 470))
+      (place R6 98900 -154900 back 315 (PN 12k))
+      (place R4 108750 -133600 back 135 (PN 12k))
+      (place R3 110400 -131950 back 135 (PN 12k))
+      (place R8 111950 -136650 back 315 (PN 12k))
+      (place R1 95150 -151050 back 315 (PN 12k))
+      (place R7 114230 -149630 back 135 (PN 12k))
+      (place R5 109500 -154250 back 135 (PN 12k))
+      (place R2 112700 -151100 back 135 (PN 12k))
+      (place R9 113500 -135100 back 135 (PN 470))
+      (place R10 111150 -152650 back 135 (PN 470))
+      (place R11 102430 -158380 back 135 (PN 470))
     )
     (component "ESP8266:ESP-12E"
       (place U3 103364 -131936 back 45 (PN "ESP-12E"))
     )
     (component "footprints:ams-1117-3.3_no-outline"
       (place U4 111850 -138400 front 0 (PN AP1117D33))
+    )
+    (component "TO_SOT_Packages_SMD:SOT-23"
+      (place Q1 92650 -149950 front 180 (PN Q_NPN_EBC))
+      (place Q2 117750 -150001 front 180 (PN Q_NPN_EBC))
     )
   )
   (library
@@ -311,21 +314,6 @@
     (image "footprints:CONN_2.54mm_1x2_no-outline"
       (pin Round[A]Pad_1500_um 2 1270 0)
       (pin Round[A]Pad_1500_um 1 -1270 0)
-    )
-    (image "LEDs:LED-0603"
-      (outline (path signal 150  -1100 -550  800 -550))
-      (outline (path signal 150  -1100 550  800 550))
-      (outline (path signal 150  -200 0  250 0))
-      (outline (path signal 150  -250 250  -250 -250))
-      (outline (path signal 150  -250 0  0 250))
-      (outline (path signal 150  0 250  0 -250))
-      (outline (path signal 150  0 -250  -250 0))
-      (outline (path signal 50  1400 750  1400 -750))
-      (outline (path signal 50  1400 -750  -1400 -750))
-      (outline (path signal 50  -1400 -750  -1400 750))
-      (outline (path signal 50  -1400 750  1400 750))
-      (pin Rect[T]Pad_797.56x797.56_um (rotate 180) 2 749.3 0)
-      (pin Rect[T]Pad_797.56x797.56_um (rotate 180) 1 -749.3 0)
     )
     (image Capacitors_SMD:C_0603
       (outline (path signal 50  -1450 750  1450 750))
@@ -449,6 +437,20 @@
       (pin Rect[T]Pad_1016x2032_um 3 2286 -3302)
       (pin Rect[T]Pad_1016x2032_um 1 -2286 -3302)
     )
+    (image "TO_SOT_Packages_SMD:SOT-23"
+      (outline (path signal 50  -1650 1600  1650 1600))
+      (outline (path signal 50  1650 1600  1650 -1600))
+      (outline (path signal 50  1650 -1600  -1650 -1600))
+      (outline (path signal 50  -1650 -1600  -1650 1600))
+      (outline (path signal 150  1299.16 650.24  1250.9 650.24))
+      (outline (path signal 150  -1499.82 -50.8  -1499.82 650.24))
+      (outline (path signal 150  -1499.82 650.24  -1250.9 650.24))
+      (outline (path signal 150  1299.16 650.24  1499.82 650.24))
+      (outline (path signal 150  1499.82 650.24  1499.82 -50.8))
+      (pin Rect[T]Pad_800.1x800.1_um 1 -950 -1000.76)
+      (pin Rect[T]Pad_800.1x800.1_um 2 950 -1000.76)
+      (pin Rect[T]Pad_800.1x800.1_um 3 0 998.22)
+    )
     (padstack Round[T]Pad_1399.54_um
       (shape (circle F.Cu 1399.54))
       (attach off)
@@ -488,12 +490,12 @@
       (shape (rect F.Cu -250 -450 250 450))
       (attach off)
     )
-    (padstack Rect[T]Pad_797.56x797.56_um
-      (shape (rect F.Cu -398.78 -398.78 398.78 398.78))
-      (attach off)
-    )
     (padstack Rect[T]Pad_800x750_um
       (shape (rect F.Cu -400 -375 400 375))
+      (attach off)
+    )
+    (padstack Rect[T]Pad_800.1x800.1_um
+      (shape (rect F.Cu -400.05 -400.05 400.05 400.05))
       (attach off)
     )
     (padstack Rect[T]Pad_1016x2032_um
@@ -663,23 +665,20 @@
       (pins LED25-6 LED29-1)
     )
     (net nRST
-      (pins C4-1 U3-1 R7-1)
+      (pins C4-1 U3-1 R9-1 Q2-3)
     )
     (net V_USB
       (pins LED5-4 LED1-4 LED9-4 P3-1 LED7-4 LED11-4 P5-1 LED8-4 C2-2 U1-8 LED12-4
         C3-2 LED4-4 P9-1 C7-1 LED2-4 P1-1 LED6-4 LED3-4 P7-1 LED10-4 U4-3)
     )
     (net V_3.3
-      (pins C6-1 C5-1 U1-6 U1-7 C10-1 C8-1 R6-1 R4-2 R3-2 U3-8 R1-2 R2-2 U4-2)
-    )
-    (net "Net-(D1-Pad2)"
-      (pins D1-2 R6-2)
+      (pins C6-1 C5-1 U1-7 C10-1 C8-1 R4-2 R3-2 U3-8 R8-1 R1-2 R2-2 U4-2)
     )
     (net GPIO16
-      (pins SW1-1 SW1-1@1 D1-1 U3-4 R7-2)
+      (pins SW1-1 SW1-1@1 U3-4 R8-2 R9-2)
     )
     (net GPIO0
-      (pins LED1-1 U3-18 R1-1 R9-1)
+      (pins LED1-1 U3-18 R1-1 Q1-3 R10-1)
     )
     (net GPIO2
       (pins LED3-1 U3-17 R2-1)
@@ -697,7 +696,7 @@
       (pins U1-4 P1-3)
     )
     (net RX
-      (pins U3-21 R8-2)
+      (pins U3-21 R11-2)
     )
     (net TX
       (pins U1-25 U3-22)
@@ -942,12 +941,6 @@
     (net "Net-(P1-Pad4)"
       (pins P1-4)
     )
-    (net "Net-(R8-Pad1)"
-      (pins U1-26 R8-1)
-    )
-    (net "Net-(R9-Pad2)"
-      (pins SW2-1 SW2-1@1 R9-2)
-    )
     (net "Net-(U1-Pad1)"
       (pins U1-1)
     )
@@ -1038,12 +1031,6 @@
     (net LED4_DATA
       (pins LED4-1 U3-20)
     )
-    (net "Net-(U1-Pad24)"
-      (pins U1-24)
-    )
-    (net "Net-(U1-Pad28)"
-      (pins U1-28)
-    )
     (net "Net-(LED13-Pad3)"
       (pins LED37-3 P27-2 LED25-3 LED21-3 LED17-3 LED13-3 P11-1 LED33-3 LED29-3)
     )
@@ -1092,16 +1079,33 @@
     (net "Net-(LED44-Pad4)"
       (pins LED52-4 P25-2 LED44-4 LED48-4)
     )
-    (class kicad_default "" ADC EN GPIO0 GPIO15 "Net-(C4-Pad2)" "Net-(D1-Pad2)"
-      "Net-(LED13-Pad3)" "Net-(LED13-Pad4)" "Net-(LED14-Pad3)" "Net-(LED14-Pad4)"
-      "Net-(LED15-Pad3)" "Net-(LED15-Pad4)" "Net-(LED16-Pad3)" "Net-(LED16-Pad4)"
-      "Net-(LED41-Pad3)" "Net-(LED41-Pad4)" "Net-(LED42-Pad3)" "Net-(LED42-Pad4)"
-      "Net-(LED43-Pad3)" "Net-(LED43-Pad4)" "Net-(LED44-Pad3)" "Net-(LED44-Pad4)"
-      "Net-(R8-Pad1)" "Net-(U1-Pad16)" "Net-(U1-Pad17)" "Net-(U1-Pad18)" "Net-(U1-Pad19)"
-      "Net-(U1-Pad2)" "Net-(U1-Pad20)" "Net-(U1-Pad21)" "Net-(U1-Pad22)" "Net-(U1-Pad23)"
-      "Net-(U1-Pad24)" "Net-(U1-Pad27)" "Net-(U1-Pad28)" "Net-(U1-Pad9)" "Net-(U3-Pad10)"
-      "Net-(U3-Pad11)" "Net-(U3-Pad12)" "Net-(U3-Pad13)" "Net-(U3-Pad14)"
-      "Net-(U3-Pad9)" RX TX USB_D+ "USB_D-" nRST
+    (net DTR
+      (pins U1-28 R7-1 Q1-1)
+    )
+    (net "Net-(Q1-Pad2)"
+      (pins R6-2 Q1-2)
+    )
+    (net RTS
+      (pins U1-24 R6-1 Q2-1)
+    )
+    (net "Net-(Q2-Pad2)"
+      (pins R7-2 Q2-2)
+    )
+    (net "Net-(U1-Pad6)"
+      (pins U1-6)
+    )
+    (net "Net-(R10-Pad2)"
+      (pins SW2-1 SW2-1@1 R10-2)
+    )
+    (net "Net-(R11-Pad1)"
+      (pins U1-26 R11-1)
+    )
+    (class kicad_default "" ADC DTR EN GPIO0 GPIO15 "Net-(C4-Pad2)" "Net-(Q1-Pad2)"
+      "Net-(Q2-Pad2)" "Net-(R10-Pad2)" "Net-(R11-Pad1)" "Net-(U1-Pad16)" "Net-(U1-Pad17)"
+      "Net-(U1-Pad18)" "Net-(U1-Pad19)" "Net-(U1-Pad2)" "Net-(U1-Pad20)" "Net-(U1-Pad21)"
+      "Net-(U1-Pad22)" "Net-(U1-Pad23)" "Net-(U1-Pad27)" "Net-(U1-Pad6)" "Net-(U1-Pad9)"
+      "Net-(U3-Pad10)" "Net-(U3-Pad11)" "Net-(U3-Pad12)" "Net-(U3-Pad13)"
+      "Net-(U3-Pad14)" "Net-(U3-Pad9)" RTS RX TX USB_D+ "USB_D-" nRST
       (circuit
         (use_via Via[0-1]_600:400_um)
       )
@@ -1123,10 +1127,12 @@
       "Net-(LED10-Pad2)" "Net-(LED10-Pad5)" "Net-(LED10-Pad6)" "Net-(LED11-Pad1)"
       "Net-(LED11-Pad2)" "Net-(LED11-Pad5)" "Net-(LED11-Pad6)" "Net-(LED12-Pad1)"
       "Net-(LED12-Pad2)" "Net-(LED12-Pad5)" "Net-(LED12-Pad6)" "Net-(LED13-Pad1)"
-      "Net-(LED13-Pad2)" "Net-(LED13-Pad5)" "Net-(LED13-Pad6)" "Net-(LED14-Pad1)"
-      "Net-(LED14-Pad2)" "Net-(LED14-Pad5)" "Net-(LED14-Pad6)" "Net-(LED15-Pad1)"
-      "Net-(LED15-Pad2)" "Net-(LED15-Pad5)" "Net-(LED15-Pad6)" "Net-(LED16-Pad1)"
-      "Net-(LED16-Pad2)" "Net-(LED16-Pad5)" "Net-(LED16-Pad6)" "Net-(LED17-Pad5)"
+      "Net-(LED13-Pad2)" "Net-(LED13-Pad3)" "Net-(LED13-Pad4)" "Net-(LED13-Pad5)"
+      "Net-(LED13-Pad6)" "Net-(LED14-Pad1)" "Net-(LED14-Pad2)" "Net-(LED14-Pad3)"
+      "Net-(LED14-Pad4)" "Net-(LED14-Pad5)" "Net-(LED14-Pad6)" "Net-(LED15-Pad1)"
+      "Net-(LED15-Pad2)" "Net-(LED15-Pad3)" "Net-(LED15-Pad4)" "Net-(LED15-Pad5)"
+      "Net-(LED15-Pad6)" "Net-(LED16-Pad1)" "Net-(LED16-Pad2)" "Net-(LED16-Pad3)"
+      "Net-(LED16-Pad4)" "Net-(LED16-Pad5)" "Net-(LED16-Pad6)" "Net-(LED17-Pad5)"
       "Net-(LED17-Pad6)" "Net-(LED18-Pad5)" "Net-(LED18-Pad6)" "Net-(LED19-Pad5)"
       "Net-(LED19-Pad6)" "Net-(LED2-Pad5)" "Net-(LED2-Pad6)" "Net-(LED20-Pad5)"
       "Net-(LED20-Pad6)" "Net-(LED21-Pad5)" "Net-(LED21-Pad6)" "Net-(LED22-Pad5)"
@@ -1140,40 +1146,44 @@
       "Net-(LED35-Pad6)" "Net-(LED36-Pad5)" "Net-(LED36-Pad6)" "Net-(LED37-Pad5)"
       "Net-(LED37-Pad6)" "Net-(LED38-Pad5)" "Net-(LED38-Pad6)" "Net-(LED39-Pad5)"
       "Net-(LED39-Pad6)" "Net-(LED4-Pad5)" "Net-(LED4-Pad6)" "Net-(LED40-Pad5)"
-      "Net-(LED40-Pad6)" "Net-(LED41-Pad1)" "Net-(LED41-Pad2)" "Net-(LED41-Pad5)"
-      "Net-(LED41-Pad6)" "Net-(LED42-Pad1)" "Net-(LED42-Pad2)" "Net-(LED42-Pad5)"
-      "Net-(LED42-Pad6)" "Net-(LED43-Pad1)" "Net-(LED43-Pad2)" "Net-(LED43-Pad5)"
-      "Net-(LED43-Pad6)" "Net-(LED44-Pad1)" "Net-(LED44-Pad2)" "Net-(LED44-Pad5)"
+      "Net-(LED40-Pad6)" "Net-(LED41-Pad1)" "Net-(LED41-Pad2)" "Net-(LED41-Pad3)"
+      "Net-(LED41-Pad4)" "Net-(LED41-Pad5)" "Net-(LED41-Pad6)" "Net-(LED42-Pad1)"
+      "Net-(LED42-Pad2)" "Net-(LED42-Pad3)" "Net-(LED42-Pad4)" "Net-(LED42-Pad5)"
+      "Net-(LED42-Pad6)" "Net-(LED43-Pad1)" "Net-(LED43-Pad2)" "Net-(LED43-Pad3)"
+      "Net-(LED43-Pad4)" "Net-(LED43-Pad5)" "Net-(LED43-Pad6)" "Net-(LED44-Pad1)"
+      "Net-(LED44-Pad2)" "Net-(LED44-Pad3)" "Net-(LED44-Pad4)" "Net-(LED44-Pad5)"
       "Net-(LED44-Pad6)" "Net-(LED45-Pad5)" "Net-(LED45-Pad6)" "Net-(LED46-Pad5)"
       "Net-(LED46-Pad6)" "Net-(LED47-Pad5)" "Net-(LED47-Pad6)" "Net-(LED48-Pad5)"
       "Net-(LED48-Pad6)" "Net-(LED49-Pad5)" "Net-(LED49-Pad6)" "Net-(LED5-Pad5)"
       "Net-(LED5-Pad6)" "Net-(LED50-Pad5)" "Net-(LED50-Pad6)" "Net-(LED51-Pad5)"
       "Net-(LED51-Pad6)" "Net-(LED52-Pad5)" "Net-(LED52-Pad6)" "Net-(LED53-Pad5)"
       "Net-(LED53-Pad6)" "Net-(LED9-Pad5)" "Net-(LED9-Pad6)" "Net-(P1-Pad4)"
-      "Net-(R9-Pad2)" "Net-(U1-Pad1)" "Net-(U1-Pad10)" "Net-(U1-Pad11)" "Net-(U1-Pad12)"
-      "Net-(U1-Pad13)" "Net-(U1-Pad14)" "Net-(U1-Pad15)" V_3.3 V_USB
+      "Net-(U1-Pad1)" "Net-(U1-Pad10)" "Net-(U1-Pad11)" "Net-(U1-Pad12)" "Net-(U1-Pad13)"
+      "Net-(U1-Pad14)" "Net-(U1-Pad15)" V_3.3 V_USB
       (circuit
         (use_via Via[0-1]_700:500_um)
       )
       (rule
-        (width 250)
+        (width 400)
         (clearance 200.1)
       )
     )
   )
   (wiring
-    (wire (path F.Cu 250  99887.5 -151262  101400 -149750  103850 -149750  104100 -150000)(net GND)(type protect))
-    (wire (path F.Cu 250  103900 -149800  104100 -150000)(net GND)(type protect))
-    (wire (path F.Cu 400  99887.5 -152938  99887.5 -151262  98212.5 -151262  98212.5 -152938
-            99887.5 -152938)(net GND)(type protect))
-    (wire (path F.Cu 250  99550 -149650  99550 -150925  99887.5 -151262)(net GND)(type protect))
-    (wire (path F.Cu 200  98212.5 -152938  98212.5 -151262)(net GND)(type protect))
-    (wire (path F.Cu 250  96600 -150600  96600 -150150)(net V_USB)(type protect))
-    (wire (path F.Cu 250  97550 -149650  98050 -149650)(net V_3.3)(type protect))
-    (wire (path F.Cu 250  98550 -149650  98550 -148650  98900 -148300)(net "USB_D-")(type protect))
-    (wire (path F.Cu 250  99050 -149650  99050 -149050  99350 -148750)(net USB_D+)(type protect))
-    (wire (path F.Cu 250  101500 -152100  102150 -152100  102400 -152350)(net TX)(type protect))
-    (wire (path F.Cu 250  102500 -151600  102800 -151900)(net "Net-(R8-Pad1)")(type protect))
-    (wire (path F.Cu 250  101500 -151600  102500 -151600)(net "Net-(R8-Pad1)")(type protect))
+    (wire (path F.Cu 250  99250 -149800  99250 -151075  99587.5 -151412)(net GND)(type protect))
+    (wire (path B.Cu 250  101100 -154650  101100 -153999  101950 -153149)(net GND)(type protect))
+    (wire (path F.Cu 250  99587.5 -153088  101100 -154600  101100 -154650)(net GND)(type protect))
+    (wire (path F.Cu 250  96300 -150750  95700 -150750)(net V_USB)(type protect))
+    (wire (path F.Cu 250  97250 -149800  97250 -149150)(net V_3.3)(type protect))
+    (wire (path F.Cu 250  98250 -149800  98250 -149200)(net "USB_D-")(type protect))
+    (wire (path F.Cu 250  98250 -149125  98250 -149200)(net "USB_D-")(type protect))
+    (wire (path F.Cu 250  98750 -149800  98750 -149150)(net USB_D+)(type protect))
+    (wire (path F.Cu 250  98750 -149250  98750 -149150)(net USB_D+)(type protect))
+    (wire (path F.Cu 250  101200 -152250  101850 -152250)(net TX)(type protect))
+    (wire (path F.Cu 400  137750 -147250  137650 -147150)(net "Net-(LED41-Pad3)")(type protect))
+    (wire (path F.Cu 250  101200 -150750  101875 -150750)(net DTR)(type protect))
+    (wire (path F.Cu 250  101200 -152750  101850 -152750)(net RTS)(type protect))
+    (wire (path F.Cu 250  101200 -151750  101875 -151750)(net "Net-(R11-Pad1)")(type protect))
+    (via "Via[0-1]_700:500_um"  101100 -154650 (net GND)(type protect))
   )
 )
