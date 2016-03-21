@@ -24,7 +24,8 @@ function on_connect()
     .."\nPassword  : "..password
     .."\nBSSID: "..bssid.."\n"
   )
-dofile('udp_broadcast.lua')
+  dofile('udp_broadcast.lua')
   dofile('udp_listen.lua')
 end
-  
+
+enduser_setup.start(on_connect)
