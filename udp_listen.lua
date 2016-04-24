@@ -27,7 +27,12 @@ function listen(s, data)
   timeoutClear()
 end
 
+function udp_listen_init()
+  clear()
+end
 
-sock=net.createServer(net.UDP) 
-sock:on("receive", listen)
-sock:listen(UDP_LISTEN_PORT)
+function udp_listen_run()
+  sock=net.createServer(net.UDP)
+  sock:on("receive", listen)
+  sock:listen(UDP_LISTEN_PORT)
+end

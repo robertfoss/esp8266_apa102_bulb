@@ -15,6 +15,9 @@ UDP_BROADCAST_CONFIG_PORT = u16_to_str(UDP_BROADCAST_PORT)
 UDP_BROADCAST_CONFIG_NBR_LEDS = u16_to_str(21)
 UDP_BROADCAST_CONFIG_NBR_BYTES_PER_LED = u8_to_str(4)
 
+dofile('udp_broadcast.lua')
+dofile('udp_listen.lua')
+
 function on_connect()
   print("Connected to wifi as: " .. wifi.sta.getip())
   local ssid,password,bssid_set,bssid = wifi.sta.getconfig()
@@ -24,8 +27,11 @@ function on_connect()
     .."\nPassword  : "..password
     .."\nBSSID: "..bssid.."\n"
   )
-  dofile('udp_broadcast.lua')
-  dofile('udp_listen.lua')
+  udp_listen_run()
+  udp_broadcast_run()
 end
+
+udp_listen_init()
+udp_broadcast_init()
 
 enduser_setup.start(on_connect)

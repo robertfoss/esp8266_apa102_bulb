@@ -13,4 +13,9 @@ function broadcast()
   sock:close()
 end
 
-tmr.alarm(0, 2000, 1, broadcast)
+function udp_broadcast_init()
+end
+
+function udp_broadcast_run()
+  tmr.alarm(0, 2000, 1, broadcast)
+end
