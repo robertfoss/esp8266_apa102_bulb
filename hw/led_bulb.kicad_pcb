@@ -1,11 +1,11 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.2-4+6225~38~ubuntu15.10.1-stable)
+(kicad_pcb (version 4) (host pcbnew 4.1.0-alpha+201606220817+6945~45~ubuntu16.04.1-product)
 
   (general
     (links 308)
     (no_connects 0)
-    (area 78.0316 71.860714 180.518401 173.1684)
+    (area 82.996992 76.749999 175.498858 168.255113)
     (thickness 1.6)
-    (drawings 266)
+    (drawings 270)
     (tracks 1134)
     (zones 0)
     (modules 170)
@@ -75,7 +75,6 @@
       (hpglpennumber 1)
       (hpglpenspeed 20)
       (hpglpendiameter 15)
-      (hpglpenoverlay 2)
       (psnegative false)
       (psa4output false)
       (plotreference true)
@@ -900,7 +899,7 @@
     (tags "QFN 0.5")
     (path /56142198)
     (attr smd)
-    (fp_text reference U1 (at -3.6 -0.1 360) (layer F.SilkS)
+    (fp_text reference U1 (at -3.6 -0.1) (layer F.SilkS)
       (effects (font (size 0.7 0.7) (thickness 0.1)))
     )
     (fp_text value CP2102 (at 0 3.875 270) (layer F.Fab) hide
@@ -1161,7 +1160,7 @@
   (module APA102:APA102 (layer F.Cu) (tedit 565BC78D) (tstamp 565BD493)
     (at 112.15 145.6 270)
     (path /565AB1F6)
-    (fp_text reference LED2 (at -3.48 -0.02 360) (layer F.SilkS) hide
+    (fp_text reference LED2 (at -3.48 -0.02) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.15)))
     )
     (fp_text value APA102 (at 0.2 0 270) (layer F.SilkS)
@@ -1228,7 +1227,7 @@
   (module APA102:APA102 (layer F.Cu) (tedit 565BC94A) (tstamp 565BD4BB)
     (at 118.7 145.6 270)
     (path /565AB1F0)
-    (fp_text reference LED6 (at -3.4 0.2 360) (layer F.SilkS) hide
+    (fp_text reference LED6 (at -3.4 0.2) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.15)))
     )
     (fp_text value APA102 (at 0.2 0 270) (layer F.SilkS)
@@ -2566,7 +2565,7 @@
   (module APA102:APA102 (layer F.Cu) (tedit 565BCE77) (tstamp 565BD4E3)
     (at 125.15 145.6 270)
     (path /565AB1EA)
-    (fp_text reference LED10 (at -3.3 -0.1 360) (layer F.SilkS) hide
+    (fp_text reference LED10 (at -3.3 -0.1) (layer F.SilkS) hide
       (effects (font (size 1.5 1.5) (thickness 0.15)))
     )
     (fp_text value APA102 (at 0.2 0 270) (layer F.SilkS)
@@ -3566,7 +3565,7 @@
     (tags SOT-23)
     (path /56E3F2BE)
     (attr smd)
-    (fp_text reference Q1 (at -0.05 0 360) (layer F.SilkS)
+    (fp_text reference Q1 (at -0.05 0) (layer F.SilkS)
       (effects (font (size 0.7 0.7) (thickness 0.1)))
     )
     (fp_text value Q_NPN_EBC (at 0 2.3 180) (layer F.Fab)
@@ -3600,7 +3599,7 @@
     (tags SOT-23)
     (path /56E3F86E)
     (attr smd)
-    (fp_text reference Q2 (at 0.05 0.00076 360) (layer F.SilkS)
+    (fp_text reference Q2 (at 0.05 0.00076) (layer F.SilkS)
       (effects (font (size 0.7 0.7) (thickness 0.1)))
     )
     (fp_text value Q_NPN_EBC (at 0 2.3 180) (layer F.Fab)
@@ -4440,6 +4439,18 @@
     (pad "" np_thru_hole circle (at 0 0 90) (size 0.3 0.3) (drill 0.3) (layers *.Cu *.Mask F.SilkS))
   )
 
+  (gr_text D (at 150.35 95.55 270) (layer B.SilkS) (tstamp 579511BF)
+    (effects (font (size 0.7 0.7) (thickness 0.1)) (justify mirror))
+  )
+  (gr_text VCC (at 150.35 91.8 270) (layer B.SilkS) (tstamp 579511BE)
+    (effects (font (size 0.7 0.7) (thickness 0.1)) (justify mirror))
+  )
+  (gr_text CLK (at 147.8 94.9 270) (layer B.SilkS) (tstamp 579511BD)
+    (effects (font (size 0.7 0.7) (thickness 0.1)) (justify mirror))
+  )
+  (gr_text GND (at 147.8 91.85 270) (layer B.SilkS) (tstamp 579511BC)
+    (effects (font (size 0.7 0.7) (thickness 0.1)) (justify mirror))
+  )
   (gr_text GND (at 107.15 126.85) (layer B.SilkS) (tstamp 56DC62F4)
     (effects (font (size 0.7 0.7) (thickness 0.1)) (justify mirror))
   )

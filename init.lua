@@ -9,6 +9,7 @@ function u8_to_str(nbr)
   return string.char(byte0)
 end
 
+HW_VER = 1
 UDP_LISTEN_PORT = 10001
 UDP_BROADCAST_PORT = 10000
 UDP_BROADCAST_CONFIG_PORT = u16_to_str(UDP_BROADCAST_PORT)

@@ -1,38 +1,46 @@
-function clear()
-  local clearOne = string.char(0, 0, 0, 0)
-  local clearAll = string.rep(clearOne, 100)
-  -- v3 HW
-  --apa102.write(6, 7, clearAll)
-  --apa102.write(3, 5, clearAll)
-  --apa102.write(1, 2, clearAll)
-  --apa102.write(4, 8, clearAll)
+local last_anim_time = 0
+local CLEAR_TIMEOUT = 10 * 1000 * 1000
+local COLOR_OFF = string.char(0, 0, 0, 0)
+local COLOR_GREEN = string.char(255, 0, 0, 255)
+local server
 
-  -- v2 HW
-  apa102.write(6, 5, clearAll)
+
+function ledOutput(data)
+  if HW_VER == 1 or HW_VER == 2 then
+    -- HW_VER <= 2
+    apa102.write(6, 5, data)
+  else
+    -- HW_VER >= 3  
+    apa102.write(6, 7, data)
+    apa102.write(3, 5, data)
+    apa102.write(1, 2, data)
+    apa102.write(4, 8, data)
+  end
+end
+
+function fillColor(color)
+  local colorAll = string.rep(color, 100)
+  ledOutput(colorAll)
 end
 
 function timeoutClear()
-  tmr.alarm(1, 5*1000, tmr.ALARM_SINGLE, clear)
+  if (tmr.now() - last_anim_time) > CLEAR_TIMEOUT then
+    fillColor(COLOR_OFF)
+  end
 end
 
-function listen(s, data)
-  -- v3 HW
-  --apa102.write(6, 7, data)
-  --apa102.write(3, 5, data)
-  --apa102.write(1, 2, data)
-  --apa102.write(4, 8, data)
-
-  -- v2 HW
-  apa102.write(6, 5, data)
-  timeoutClear()
+function receive_handler(sock, data)
+  ledOutput(data)
+  last_anim_time = tmr.now()
 end
 
 function udp_listen_init()
-  clear()
+  fillColor(COLOR_OFF)
+  tmr.alarm(1, 250, tmr.ALARM_AUTO, timeoutClear)
 end
 
 function udp_listen_run()
-  sock=net.createServer(net.UDP)
-  sock:on("receive", listen)
-  sock:listen(UDP_LISTEN_PORT)
+  server = net.createServer(net.UDP)
+  server:on("receive", receive_handler)
+  server:listen(UDP_LISTEN_PORT)
 end
