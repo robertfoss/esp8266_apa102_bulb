@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 from clientManager import runClientManager
 from updateServer import runUpdateServer
 from animator import animator
