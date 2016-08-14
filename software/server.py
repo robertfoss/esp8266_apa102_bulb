@@ -8,19 +8,13 @@ HTTP_PORT = 10000
 RECEIVE_PORT = 10000
 TRANSMIT_PORT = 10001
 
-PIXELS = 20
-BITS_PER_PIXEL = 4
-BRIGHTNESS = 0x07
-
-
+BRIGHTNESS = 0x03
 
 if __name__ == "__main__":
     try:
-        animator = animator(BRIGHTNESS, PIXELS, BITS_PER_PIXEL)
-        runClientManager(animator, RECEIVE_PORT, TRANSMIT_PORT)
+        animator = animator(BRIGHTNESS)
+        runClientManager(animator, RECEIVE_PORT)
         runUpdateServer(HTTP_PORT)
-
-
     except KeyboardInterrupt:
         os._exit(1)
 

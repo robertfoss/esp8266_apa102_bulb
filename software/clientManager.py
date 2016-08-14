@@ -1,6 +1,7 @@
 import socket
 import time
 import threading
+from ledBulb import ledBulb
 from twisted.internet import protocol, reactor, endpoints
 from twisted.internet.protocol import DatagramProtocol
 
@@ -10,14 +11,13 @@ TIME_PER_FRAME = 1/ANIMATION_SPEED
 
 bulbs = dict()
 
-def heartbeat(ip):
-    timestamp = time.time()
+def heartbeat(ip, data):
     if ip in bulbs:
-        _, counter, socket = bulbs[ip]
-        bulbs[ip] = (timestamp, counter, socket)
+        bulbs[ip].ping()
     else:
-        bulbs[ip] = (timestamp, 0, None)
-        print("New bulb found - %s for a total of\t%d" % (str(ip), len(bulbs)))
+        bulb = ledBulb(ip, data)
+        bulbs[ip] = bulb
+        print("Bulb #%d found: %s" % (len(bulbs), str(bulb)))
 
 
 class HeartbeatReciever(DatagramProtocol):
@@ -33,37 +33,29 @@ class HeartbeatReciever(DatagramProtocol):
 
     def datagramReceived(self, data, source):
           ip, port = source
-          heartbeat(ip)
+          heartbeat(ip, data)
 
 
 class animationThread(threading.Thread):
-    def __init__(self, animator, transmitPort):
+    def __init__(self, animator):
         threading.Thread.__init__(self)
         self.animator = animator
-        self.transmitPort = transmitPort
 
-    def process_a_bulb(self, timestamp, counter, sock, ip):
-        data = self.animator.render(counter)
-
+    def process_a_bulb(self, bulb):
+        data = self.animator.render(bulb)
+        bulb.counter += 1
         try:
-            if sock == None:
-                sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
-                sock.sendto(bytes(data), (ip, self.transmitPort))
-            sock.sendto(bytes(data), (ip, self.transmitPort))
+            bulb.socket.sendto(bytes(data), (bulb.ip, bulb.port))
         except OSError:
             pass
-        
-        counter += 1
-        bulbs[ip] = (timestamp, counter, sock)
-
 
     def process_all_bulbs(self):
         for ip in list(bulbs.keys()):
-            timestamp, counter, socket = bulbs[ip]
-            if (time.time() - timestamp < BULB_TIME_TO_LIVE):
-                self.process_a_bulb(timestamp, counter, socket, ip)
+            bulb = bulbs[ip]
+            if (time.time() - bulb.timestamp < BULB_TIME_TO_LIVE):
+                self.process_a_bulb(bulb)
             else:
-                print("Removing stale bulb %s" % (str(ip)))
+                print("Removing stale bulb: %s" % (str(bulb.ip)))
                 del bulbs[ip]
 
     def animate(self):
@@ -81,10 +73,10 @@ class animationThread(threading.Thread):
             self.animate()
 
 
-def runClientManager(animator, receivePort, transmitPort):
+def runClientManager(animator, receivePort):
     print("Starting up broadcast listener..")
     reactor.listenMulticast(receivePort, HeartbeatReciever(), listenMultiple=True)
     threading.Thread(target=reactor.run, args=(False,)).start()
 
-    anim = animationThread(animator, transmitPort)
+    anim = animationThread(animator)
     anim.start()

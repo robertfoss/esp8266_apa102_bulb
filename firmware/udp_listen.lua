@@ -30,6 +30,7 @@ function timeoutClear()
 end
 
 function receive_handler(sock, data)
+print("receive_handler")
   ledOutput(data)
   last_anim_time = tmr.now()
 end
