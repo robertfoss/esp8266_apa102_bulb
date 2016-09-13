@@ -4,6 +4,7 @@ import threading
 from ledBulb import ledBulb
 from twisted.internet import protocol, reactor, endpoints
 from twisted.internet.protocol import DatagramProtocol
+from config import config
 
 BULB_TIME_TO_LIVE = 20
 ANIMATION_SPEED = 30.0 # in FPS
@@ -73,9 +74,9 @@ class animationThread(threading.Thread):
             self.animate()
 
 
-def runClientManager(animator, receivePort):
-    print("Starting up broadcast listener..")
-    reactor.listenMulticast(receivePort, HeartbeatReciever(), listenMultiple=True)
+def runClientManager(animator, config):
+    print("Starting up broadcast listener on port %d" % config.receive_port)
+    reactor.listenMulticast(config.receive_port, HeartbeatReciever(), listenMultiple=True)
     threading.Thread(target=reactor.run, args=(False,)).start()
 
     anim = animationThread(animator)

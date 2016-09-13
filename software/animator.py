@@ -7,13 +7,13 @@ SIN_SIZE_PER_STRIP  = 20.0
 
 class animator():
 
-    def __init__(self, brightness):
-        self.brightness = brightness
+    def __init__(self, config):
+        self.config = config
 
     def render(self, bulb):
         i = bulb.counter
         data = bytearray(bulb.strands * bulb.pixels * bulb.bpp)
-        
+
         for y in range(0, bulb.strands):
             for x in range(0, bulb.pixels):
 	            hue = math.sin((i*SIN_CHANGE_PER_TIME + x*SIN_CHANGE_PER_PX) / SIN_SIZE_PER_STRIP)
@@ -23,9 +23,9 @@ class animator():
 	            g = int(g * 255)
 	            b = int(b * 255)
                 
-	            data[(x+y)*bulb.bpp + 0] = self.brightness
-	            data[(x+y)*bulb.bpp + 1] = b
-	            data[(x+y)*bulb.bpp + 2] = g
-	            data[(x+y)*bulb.bpp + 3] = r
+	            data[(x+y*bulb.pixels)*bulb.bpp + 0] = self.config.brightness
+	            data[(x+y*bulb.pixels)*bulb.bpp + 1] = b
+	            data[(x+y*bulb.pixels)*bulb.bpp + 2] = g
+	            data[(x+y*bulb.pixels)*bulb.bpp + 3] = r
 
         return data
