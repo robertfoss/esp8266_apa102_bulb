@@ -5,6 +5,7 @@ from clientManager import runClientManager
 from updateServer import runUpdateServer
 from animator import animator
 from config import config
+from console import console
 
 HTTP_PORT = 10000
 RECEIVE_PORT = 10000
@@ -14,12 +15,14 @@ BRIGHTNESS = 0x09
 
 if __name__ == "__main__":
 
-    cfg = config();
+    config = config();
 
     try:
-        animator = animator(cfg)
-        runClientManager(animator, cfg)
-        runUpdateServer(cfg)
+        animator = animator(config)
+        runClientManager(animator, config)
+        runUpdateServer(config)
+        console = console(config)
+        console.start()
     except KeyboardInterrupt:
         os._exit(1)
 
