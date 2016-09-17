@@ -3,7 +3,7 @@
 import sys
 from ClientManager import ClientManager
 from UpdateServer import UpdateServer
-from animator import animator
+from Animator import Animator
 from Config import Config
 from Console import Console
 
@@ -12,7 +12,7 @@ if __name__ == "__main__":
     config = Config();
 
     try:
-        animator = animator(config)
+        animator = Animator(config)
 
         clients = ClientManager(animator, config)
         clients.run()
