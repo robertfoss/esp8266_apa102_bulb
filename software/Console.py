@@ -6,6 +6,9 @@ import signal
 import ClientManager
 import Config
 
+SYMBOL_ARROW_UP   = u'\u2191'
+SYMBOL_ARROW_DOWN = u'\u2193'
+
 class Console(threading.Thread):
     def __init__(self, config, ledBulbs):
         threading.Thread.__init__(self)
@@ -28,6 +31,7 @@ class Console(threading.Thread):
         with self.t.fullscreen():
             for bulb in (sorted(self.bulbs.values(), key=operator.attrgetter('bulb_id'))):
                 self.printTop(str(bulb))
+            self.printKeymap()
             self.printStatus()
 
     def update(self):
@@ -65,14 +69,18 @@ class Console(threading.Thread):
             print(str)
 
     def printBottom(self, str):
-        with self.t.location(0, self.t.height - 1):
+        with self.t.location(0, self.t.height - 2):
             print(str)
+
+    def printKeymap(self):
+        with self.t.location(0, self.t.height - 1):
+            pass
 
     def printStatus(self):
         with self.t.location(0, self.t.height):
-            status = ""
-            status += ("Brightness: " + self.t.bold + "%s  " + self.t.normal)  % (str(self.config.brightness).ljust(2))
-            status += ("HTTP port: " + self.t.bold + "%s  " + self.t.normal)  % (str(self.config.http_port).ljust(4))
-            status += ("Receive port: " + self.t.bold + "%s  " + self.t.normal)  % (str(self.config.receive_port).ljust(4))
+            status = u"Brightness: {0}{1} ".format(SYMBOL_ARROW_UP, SYMBOL_ARROW_DOWN)
+            status += (self.t.bold + "%s   " + self.t.normal)  % (str(self.config.brightness).ljust(2))
+            status += ("HTTP port: " + self.t.bold + "%s   " + self.t.normal)  % (str(self.config.http_port).ljust(4))
+            status += ("Receive port: " + self.t.bold + "%s   " + self.t.normal)  % (str(self.config.receive_port).ljust(4))
             print(status)
 
