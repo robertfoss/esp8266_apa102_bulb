@@ -31,7 +31,15 @@ class LedBulb(object):
         self.timestamp = time.time()
 
     def __str__(self):
-        string = "#%d " % (self.bulb_id)
+        string = "#%d" % (self.bulb_id)
+
+        status = ""
+        if self.timestamp + self.config.bulb_timeouts > time.time():
+            status = "UP"
+        else:
+            status = "DOWN"
+
+        string += status.center(6)
 
         if hasattr(self, 'ip'):
             string += str(self.ip)
@@ -43,7 +51,7 @@ class LedBulb(object):
         else:
             string += ":0"
 
-        string += " - "
+        string += " "
 
         if hasattr(self, 'hwVer'):
             string += "hw_version=" + str(self.hwVer)
@@ -79,3 +87,8 @@ class LedBulb(object):
             string += "bytes/pixel=?"
 
         return string
+
+
+class LedBulbs():
+    def __init__(self):
+        self.bulbs = dict()

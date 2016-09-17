@@ -6,6 +6,7 @@ from UpdateServer import UpdateServer
 from Animator import Animator
 from Config import Config
 from Console import Console
+from LedBulb import LedBulbs
 
 if __name__ == "__main__":
 
@@ -14,14 +15,17 @@ if __name__ == "__main__":
     try:
         animator = Animator(config)
 
-        clients = ClientManager(animator, config)
+        ledBulbs = LedBulbs()
+
+        console = Console(config, ledBulbs)
+        console.start()
+
+        clients = ClientManager(config, console, animator, ledBulbs)
         clients.run()
 
         update = UpdateServer(config)
         update.run()
 
-        console = Console(config, clients)
-        console.start()
     except KeyboardInterrupt:
         os._exit(1)
 

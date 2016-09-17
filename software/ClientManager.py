@@ -8,8 +8,9 @@ from Config import Config
 
 
 class HeartbeatReciever(DatagramProtocol):
-    def __init__(self, config, bulbs):
+    def __init__(self, config, console, bulbs):
         self.config = config
+        self.console = console
         self.bulbs = bulbs
 
     def startProtocol(self):
@@ -29,7 +30,7 @@ class HeartbeatReciever(DatagramProtocol):
         else:
             bulb = LedBulb(self.config, len(self.bulbs) + 1, ip, data)
             self.bulbs[ip] = bulb
-            print("Bulb #%d found: %s" % (len(self.bulbs), str(bulb)))
+            self.console.update()
 
 
 class animationThread(threading.Thread):
@@ -68,14 +69,14 @@ class animationThread(threading.Thread):
             self.animate()
 
 class ClientManager:
-    def __init__(self, animator, config):
-        self.animator = animator
+    def __init__(self, config, console, animator, ledBulbs):
         self.config = config
-        self.bulbs = dict()
+        self.console = console
+        self.animator = animator
+        self.bulbs = ledBulbs.bulbs
 
     def run(self):
-        print("Starting up broadcast listener on port %d" % self.config.receive_port)
-        reactor.listenMulticast(self.config.receive_port, HeartbeatReciever(self.config, self.bulbs), listenMultiple=True)
+        reactor.listenMulticast(self.config.receive_port, HeartbeatReciever(self.config, self.console, self.bulbs), listenMultiple=True)
         threading.Thread(target=reactor.run, args=(False,)).start()
 
         anim = animationThread(self.config, self.bulbs, self.animator)

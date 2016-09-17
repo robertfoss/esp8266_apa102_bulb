@@ -329,7 +329,6 @@ class HTTPServer(threading.Thread):
         self.port = port
 
     def run(self):
-        print("Starting HTTP server on port %d" % self.port)
         server_address = ("0.0.0.0", self.port)
         httpd = ThreadingSimpleServer(server_address, updateHTTPHandler)
         httpd.serve_forever()
