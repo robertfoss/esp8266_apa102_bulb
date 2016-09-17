@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import sys
-from clientManager import runClientManager
-from updateServer import runUpdateServer
+from ClientManager import ClientManager
+from UpdateServer import UpdateServer
 from animator import animator
 from config import config
 from console import console
@@ -19,8 +19,13 @@ if __name__ == "__main__":
 
     try:
         animator = animator(config)
-        runClientManager(animator, config)
-        runUpdateServer(config)
+
+        clients = ClientManager(animator, config)
+        clients.run()
+
+        update = UpdateServer(config)
+        update.run()
+
         console = console(config)
         console.start()
     except KeyboardInterrupt:

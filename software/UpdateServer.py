@@ -334,9 +334,13 @@ class HTTPServer(threading.Thread):
         httpd = ThreadingSimpleServer(server_address, updateHTTPHandler)
         httpd.serve_forever()
 
-def runUpdateServer(config):
-    http = HTTPServer(config.http_port)
-    http.start()
-    scanBinDirs()
-    setupINotify()
+class UpdateServer:
+    def __init__(self, config):
+        self.config = config
+
+    def run(self):
+        http = HTTPServer(self.config.http_port)
+        http.start()
+        scanBinDirs()
+        setupINotify()
 
