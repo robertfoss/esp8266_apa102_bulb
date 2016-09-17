@@ -2,7 +2,7 @@ import threading
 import Config
 from blessed import Terminal
 
-class console(threading.Thread):
+class Console(threading.Thread):
     def __init__(self, config):
         threading.Thread.__init__(self)
         self.config = config

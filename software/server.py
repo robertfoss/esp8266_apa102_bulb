@@ -5,7 +5,7 @@ from ClientManager import ClientManager
 from UpdateServer import UpdateServer
 from animator import animator
 from Config import Config
-from console import console
+from Console import Console
 
 if __name__ == "__main__":
 
@@ -20,7 +20,7 @@ if __name__ == "__main__":
         update = UpdateServer(config)
         update.run()
 
-        console = console(config)
+        console = Console(config)
         console.start()
     except KeyboardInterrupt:
         os._exit(1)
