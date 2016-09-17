@@ -2,7 +2,7 @@ import struct
 import time
 import socket
 
-class ledBulb(object):
+class LedBulb(object):
     def __init__(self, ip, buf):
         self.ip = ip
         self.timestamp = time.time()
