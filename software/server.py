@@ -7,12 +7,6 @@ from animator import animator
 from config import config
 from console import console
 
-HTTP_PORT = 10000
-RECEIVE_PORT = 10000
-TRANSMIT_PORT = 10001
-
-BRIGHTNESS = 0x09
-
 if __name__ == "__main__":
 
     config = config();
