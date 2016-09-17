@@ -3,7 +3,9 @@ import time
 import socket
 
 class LedBulb(object):
-    def __init__(self, ip, buf):
+    def __init__(self, config, bulb_id, ip, buf):
+        self.config = config
+        self.bulb_id = bulb_id
         self.ip = ip
         self.timestamp = time.time()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
@@ -29,7 +31,8 @@ class LedBulb(object):
         self.timestamp = time.time()
 
     def __str__(self):
-        string = ""
+        string = "#%d " % (self.bulb_id)
+
         if hasattr(self, 'ip'):
             string += str(self.ip)
         else:

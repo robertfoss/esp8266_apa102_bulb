@@ -20,7 +20,7 @@ if __name__ == "__main__":
         update = UpdateServer(config)
         update.run()
 
-        console = Console(config)
+        console = Console(config, clients)
         console.start()
     except KeyboardInterrupt:
         os._exit(1)
