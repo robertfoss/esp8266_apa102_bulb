@@ -1,5 +1,5 @@
 import threading
-import config
+import Config
 from blessed import Terminal
 
 class console(threading.Thread):
@@ -36,5 +36,5 @@ class console(threading.Thread):
         self.printBottom("Brightness: %d" % self.config.brightness)
 
     def printBottom(self, str):
-        with self.t.location(0, self.t.height - 1):
+#        with self.t.location(0, self.t.height - 1):
             print(str)

@@ -1,5 +1,4 @@
-class config(object):
-
+class Config(object):
     def __init__(self):
         self.http_port = 10000
         self.receive_port = 10000

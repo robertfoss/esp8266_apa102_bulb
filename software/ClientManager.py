@@ -1,29 +1,27 @@
 import socket
 import time
 import threading
-from ledBulb import ledBulb
+from LedBulb import LedBulb
 from twisted.internet import protocol, reactor, endpoints
 from twisted.internet.protocol import DatagramProtocol
-from config import config
+from Config import Config
 
 BULB_TIME_TO_LIVE = 20
 ANIMATION_SPEED = 30.0 # in FPS
 TIME_PER_FRAME = 1/ANIMATION_SPEED
 
-bulbs = dict()
-
-def heartbeat(ip, data):
+def heartbeat(bulbs, ip, data):
     if ip in bulbs:
         bulbs[ip].ping()
     else:
-        bulb = ledBulb(ip, data)
+        bulb = LedBulb(ip, data)
         bulbs[ip] = bulb
         print("Bulb #%d found: %s" % (len(bulbs), str(bulb)))
 
 
 class HeartbeatReciever(DatagramProtocol):
-    def __init__(self):
-        pass
+    def __init__(self, bulbs):
+        self.bulbs = bulbs
 
     def startProtocol(self):
         "Called when transport is connected"
@@ -34,13 +32,14 @@ class HeartbeatReciever(DatagramProtocol):
 
     def datagramReceived(self, data, source):
           ip, port = source
-          heartbeat(ip, data)
+          heartbeat(self.bulbs, ip, data)
 
 
 class animationThread(threading.Thread):
-    def __init__(self, animator):
+    def __init__(self, bulbs, animator):
         threading.Thread.__init__(self)
         self.animator = animator
+        self.bulbs = bulbs
 
     def process_a_bulb(self, bulb):
         data = self.animator.render(bulb)
@@ -51,13 +50,10 @@ class animationThread(threading.Thread):
             pass
 
     def process_all_bulbs(self):
-        for ip in list(bulbs.keys()):
-            bulb = bulbs[ip]
+        for ip in list(self.bulbs.keys()):
+            bulb = self.bulbs[ip]
             if (time.time() - bulb.timestamp < BULB_TIME_TO_LIVE):
                 self.process_a_bulb(bulb)
-            else:
-                print("Removing stale bulb: %s" % (str(bulb.ip)))
-                del bulbs[ip]
 
     def animate(self):
         timestamp = 0
@@ -73,11 +69,17 @@ class animationThread(threading.Thread):
         while True:
             self.animate()
 
+class ClientManager:
+    def __init__(self, animator, config):
+        self.animator = animator
+        self.config = config
+        self.bulbs = dict()
 
-def runClientManager(animator, config):
-    print("Starting up broadcast listener on port %d" % config.receive_port)
-    reactor.listenMulticast(config.receive_port, HeartbeatReciever(), listenMultiple=True)
-    threading.Thread(target=reactor.run, args=(False,)).start()
 
-    anim = animationThread(animator)
-    anim.start()
+    def run(self):
+        print("Starting up broadcast listener on port %d" % self.config.receive_port)
+        reactor.listenMulticast(self.config.receive_port, HeartbeatReciever(self.bulbs), listenMultiple=True)
+        threading.Thread(target=reactor.run, args=(False,)).start()
+
+        anim = animationThread(self.bulbs, self.animator)
+        anim.start()

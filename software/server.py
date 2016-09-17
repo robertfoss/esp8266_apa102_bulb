@@ -4,12 +4,12 @@ import sys
 from ClientManager import ClientManager
 from UpdateServer import UpdateServer
 from animator import animator
-from config import config
+from Config import Config
 from console import console
 
 if __name__ == "__main__":
 
-    config = config();
+    config = Config();
 
     try:
         animator = animator(config)
