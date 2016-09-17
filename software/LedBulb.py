@@ -2,6 +2,19 @@ import struct
 import time
 import socket
 
+
+class Mac(object):
+    def __init__(self, bytestring=None):
+        if bytestring is None:
+            self.bytes =  b'\x00\x00\x00\x00\x00\x00'
+        else:
+            self.bytes = bytestring
+
+    def __str__(self):
+        string = ":".join("{:02x}".format(c) for c in self.bytes)
+        return string
+
+
 class LedBulb(object):
     def __init__(self, config, bulb_id, ip, buf):
         self.config = config
@@ -12,7 +25,8 @@ class LedBulb(object):
         self.counter = 0
 
         try:
-            (hwVer, fwVer, port, pixels, strands, bpp) = struct.unpack('=BHHHBB', buf)
+            (hwVer, fwVer, port, pixels, strands, bpp, mac_bytes) = struct.unpack('=BHHHBB6s', buf)
+            self.mac = Mac(mac_bytes)
             self.hwVer = hwVer
             self.fwVer = fwVer
             self.port = port
@@ -20,12 +34,23 @@ class LedBulb(object):
             self.strands = strands
             self.bpp = bpp
         except struct.error:
-            self.hwVer = 1
-            self.fwVer = 0
-            self.port = 10001
-            self.pixels = 21
-            self.strands = 1
-            self.bpp = 4
+            try:
+                (hwVer, fwVer, port, pixels, strands, bpp, mac_bytes) = struct.unpack('=BHHHBB', buf)
+                self.mac = Mac()
+                self.hwVer = hwVer
+                self.fwVer = fwVer
+                self.port = port
+                self.pixels = pixels
+                self.strands = strands
+                self.bpp = bpp
+            except struct.error:
+                self.mac = Mac()
+                self.hwVer = 1
+                self.fwVer = 0
+                self.port = self.config.transmit_port
+                self.pixels = 21
+                self.strands = 1
+                self.bpp = 4
 
     def ping(self):
         self.timestamp = time.time()
@@ -51,7 +76,14 @@ class LedBulb(object):
         else:
             string += ":0"
 
-        string += " "
+        string += "  "
+
+        if hasattr(self, 'mac'):
+            string += str(self.mac)
+        else:
+            string += "00:00:00:00:00:00"
+
+        string += "  "
 
         if hasattr(self, 'hwVer'):
             string += "hw_version=" + str(self.hwVer)

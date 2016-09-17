@@ -40,7 +40,6 @@ class Console(threading.Thread):
                 self.brightnessUp()
             elif val.name == 'KEY_DOWN':
                 self.brightnessDown()
-        self.renderScreen()
         
     def run(self):
         while True:
@@ -51,12 +50,14 @@ class Console(threading.Thread):
             self.config.brightness = 31
         else:
             self.config.brightness += 1
+            self.renderScreen()
 
     def brightnessDown(self):
         if (self.config.brightness - 1 < 1):
             self.config.brightness = 1
         else:
             self.config.brightness -= 1
+            self.renderScreen()
 
     def printTop(self, str):
         with self.t.location(0, self.top_line):
