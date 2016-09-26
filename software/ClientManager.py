@@ -34,25 +34,25 @@ class HeartbeatReciever(DatagramProtocol):
 
 
 class animationThread(threading.Thread):
-    def __init__(self, config, bulbs, animator):
+    def __init__(self, config, bulbs, animationManager):
         threading.Thread.__init__(self)
-        self.animator = animator
+        self.animations = animationManager
         self.bulbs = bulbs
+
         self.config = config
 
-    def process_a_bulb(self, bulb):
-        data = self.animator.render(bulb)
-        bulb.counter += 1
-        try:
-            bulb.socket.sendto(bytes(data), (bulb.ip, bulb.port))
-        except OSError:
-            pass
-
-    def process_all_bulbs(self):
-        for ip in list(self.bulbs.keys()):
+    def processAllBulbs(self):
+        activeBulbs = list()
+        for ip in self.bulbs.values():
             bulb = self.bulbs[ip]
             if (time.time() - bulb.timestamp < self.config.bulb_timeouts):
-                self.process_a_bulb(bulb)
+                bulb.counter += 1
+                activeBulbs += bulb
+
+        self.animations.render(activeBulbs)
+
+        for bulb in activeBulbs:
+            bulb.send()
 
     def animate(self):
         timestamp = 0
@@ -60,7 +60,7 @@ class animationThread(threading.Thread):
         while True:
             new_time = time.time()
             time_to_wait = min(self.config.time_per_frame, abs(timestamp + self.config.time_per_frame - new_time))
-            self.process_all_bulbs()
+            self.processAllBulbs()
             time.sleep(time_to_wait)
             timestamp = new_time
 
@@ -69,17 +69,17 @@ class animationThread(threading.Thread):
             self.animate()
 
 class ClientManager:
-    def __init__(self, config, console, animator, ledBulbs):
+    def __init__(self, config, console, animationManager, ledBulbs):
         self.config = config
         self.console = console
-        self.animator = animator
+        self.animations = animationManager
         self.bulbs = ledBulbs.bulbs
 
     def run(self):
         reactor.listenMulticast(self.config.receive_port, HeartbeatReciever(self.config, self.console, self.bulbs), listenMultiple=True)
         threading.Thread(target=reactor.run, args=(False,)).start()
 
-        anim = animationThread(self.config, self.bulbs, self.animator)
+        anim = animationThread(self.config, self.bulbs, self.animations)
         anim.start()
 
 

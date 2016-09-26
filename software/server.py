@@ -3,7 +3,7 @@
 import sys
 from ClientManager import ClientManager
 from UpdateServer import UpdateServer
-from Animator import Animator
+from AnimationManager import AnimationManager
 from Config import Config
 from Console import Console
 from LedBulb import LedBulbs
@@ -13,14 +13,14 @@ if __name__ == "__main__":
     config = Config();
 
     try:
-        animator = Animator(config)
+        animations = AnimationManager(config)
 
         ledBulbs = LedBulbs()
 
-        console = Console(config, ledBulbs)
+        console = Console(config, ledBulbs, animations)
         console.start()
 
-        clients = ClientManager(config, console, animator, ledBulbs)
+        clients = ClientManager(config, console, animations, ledBulbs)
         clients.run()
 
         update = UpdateServer(config)

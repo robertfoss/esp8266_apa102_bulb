@@ -52,6 +52,14 @@ class LedBulb(object):
                 self.strands = 1
                 self.bpp = 4
 
+        self.pixelBuffer = bytearray(self.strands * self.pixels * self.bpp)
+
+    def send(self):
+        try:
+            self.socket.sendto(bytes(self.pixelBuffer), (self.ip, self.port))
+        except OSError:
+            pass
+
     def ping(self):
         self.timestamp = time.time()
 

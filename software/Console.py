@@ -6,21 +6,25 @@ import signal
 import ClientManager
 import Config
 
-SYMBOL_ARROW_UP   = u'\u2191'
+
+SYMBOL_ARROW_LEFT = u'\u2190'
+SYMBOL_ARROW_UP = u'\u2191'
+SYMBOL_ARROW_RIGHT = u'\u2192'
 SYMBOL_ARROW_DOWN = u'\u2193'
+SYMBOL_ARROW_LEFT_RIGHT = u'\u2194'
 
 class Console(threading.Thread):
-    def __init__(self, config, ledBulbs):
+    def __init__(self, config, ledBulbs, animationManager):
         threading.Thread.__init__(self)
         self.config = config
         self.bulbs = ledBulbs.bulbs
+        self.animations = animationManager
 
         self.t = Terminal()
         self.top_line = 1
 
         def on_resize(*args):
             self.update()
-
         signal.signal(signal.SIGWINCH, on_resize)
 
     def resetScreen(self):
@@ -44,6 +48,10 @@ class Console(threading.Thread):
                 self.brightnessUp()
             elif val.name == 'KEY_DOWN':
                 self.brightnessDown()
+            elif val.name == 'KEY_RIGHT':
+                self.animationNext()
+            elif val.name == 'KEY_LEFT':
+                self.animationPrev();
         
     def run(self):
         while True:
@@ -63,6 +71,18 @@ class Console(threading.Thread):
             self.config.brightness -= 1
             self.renderScreen()
 
+    def animationNext(self):
+        idx = self.animations.currAnimation
+        idx = (idx + 1) % self.animations.numAnimations
+        self.animations.currAnimation = idx
+        self.renderScreen()
+
+    def animationPrev(self):
+        idx = self.animations.currAnimation
+        idx = (idx - 1) % self.animations.numAnimations
+        self.animations.currAnimation = idx
+        self.renderScreen()
+
     def printTop(self, str):
         with self.t.location(0, self.top_line):
             self.top_line += 1
@@ -77,9 +97,16 @@ class Console(threading.Thread):
             pass
 
     def printStatus(self):
-        with self.t.location(0, self.t.height):
+        with self.t.location(0, self.t.height - 1):
             status = u"Brightness: {0}{1} ".format(SYMBOL_ARROW_UP, SYMBOL_ARROW_DOWN)
-            status += (self.t.bold + "%s   " + self.t.normal)  % (str(self.config.brightness).ljust(2))
+            status += (self.t.bold + "%s  " + self.t.normal)  % (str(self.config.brightness).ljust(2))
+            status += u"Animation: {0} ".format(SYMBOL_ARROW_LEFT_RIGHT)
+            animName = self.animations.animation().__class__.__name__
+            status += (self.t.bold + "%s   " + self.t.normal)  % (animName.ljust(4))
+            print(status)
+
+        with self.t.location(0, self.t.height):
+            status = ""
             status += ("HTTP port: " + self.t.bold + "%s   " + self.t.normal)  % (str(self.config.http_port).ljust(4))
             status += ("Receive port: " + self.t.bold + "%s   " + self.t.normal)  % (str(self.config.receive_port).ljust(4))
             print(status)
