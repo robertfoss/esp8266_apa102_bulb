@@ -1,5 +1,6 @@
 import glob, os
 import importlib
+import Config
 from animations.SyncdRainbow import SyncdRainbow
 from animations.StaticRainbow import StaticRainbow
 
@@ -7,11 +8,12 @@ class AnimationManager():
 
     def __init__(self, config):
         self.config = config
-        self.loadAnimations(config)
+        self.loadAnimations()
 
-    def loadAnimations(self, config):
+    def loadAnimations(self):
         self.animations = []
-        os.chdir("animations")
+        path = Config.getPwd() + "/animations"
+        os.chdir(path)
         for pyFile in glob.glob("*.py"):
             if pyFile == "AbstractAnimation.py":
                 continue
@@ -19,7 +21,7 @@ class AnimationManager():
             modulePath = ("animations.%s" % className)
             module = importlib.import_module(modulePath)
             animationClass = getattr(module, className)
-            animation = animationClass(config)
+            animation = animationClass(self.config)
             self.animations += [ animation ]
 
         self.currAnimation = 0

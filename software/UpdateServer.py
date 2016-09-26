@@ -3,11 +3,10 @@ import pyinotify
 import os.path
 import time
 import asyncore
-import sys
-import inspect
 import re
 import ntpath
 import hashlib
+import Config
 from os.path import basename
 from datetime import datetime,timedelta
 from socketserver import ThreadingMixIn
@@ -96,8 +95,8 @@ def getBinFile(isDev, version):
     return None
 
 def scanBinDirs():
-    fwBinPath = get_pwd() + FW_BIN_PATH
-    fwDevBinPath = get_pwd() + FW_DEV_BIN_PATH
+    fwBinPath = Config.getPwd() + FW_BIN_PATH
+    fwDevBinPath = Config.getPwd() + FW_DEV_BIN_PATH
 
     for file in os.listdir(fwBinPath):
         processFile(fwBinPath + os.sep + file)
@@ -148,8 +147,8 @@ class BinEventHandler(pyinotify.ProcessEvent):
 
 def setupINotify():
     events = pyinotify.IN_DELETE | pyinotify.IN_CREATE | pyinotify.IN_MODIFY | pyinotify.IN_ATTRIB
-    fwBinPath = get_pwd() + FW_BIN_PATH
-    fwDevBinPath = get_pwd() + FW_DEV_BIN_PATH
+    fwBinPath = Config.getPwd() + FW_BIN_PATH
+    fwDevBinPath = Config.getPwd() + FW_DEV_BIN_PATH
 
     wm = pyinotify.WatchManager()
     eh = BinEventHandler()
@@ -160,16 +159,6 @@ def setupINotify():
     notifier = pyinotify.ThreadedNotifier(wm, eh)
     notifier.start()
 
-
-def get_pwd(follow_symlinks=True):
-    if getattr(sys, 'frozen', False): # py2exe, PyInstaller, cx_Freeze
-        path = os.path.abspath(sys.executable)
-    else:
-        path = inspect.getabsfile(get_pwd)
-    if follow_symlinks:
-        path = os.path.realpath(path)
-    return os.path.dirname(path)
-
 def calc_md5(filename):
     hash_md5 = hashlib.md5()
     with open(filename, "rb") as f:
@@ -178,7 +167,7 @@ def calc_md5(filename):
     return hash_md5.hexdigest()
 
 def doServeFile(self, filename):
-    filepath = get_pwd() + "/" + filename
+    filepath = Config.getPwd() + "/" + filename
     if not (os.path.exists(filepath)):
         doInvalidQuery(self)
     
@@ -189,7 +178,7 @@ def doServeFile(self, filename):
     print("%s was served: %s" % (self.client_address[0], filename))
 
 def doServeHash(self, filename):
-    filepath = get_pwd() + "/" + filename
+    filepath = Config.getPwd() + "/" + filename
     if not (os.path.exists(filepath)):
         doInvalidQuery(self)
     
