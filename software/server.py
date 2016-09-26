@@ -16,15 +16,13 @@ if __name__ == "__main__":
         animations = AnimationManager(config)
 
         ledBulbs = LedBulbs()
-
         console = Console(config, ledBulbs, animations)
-        console.start()
-
         clients = ClientManager(config, console, animations, ledBulbs)
-        clients.run()
-
         update = UpdateServer(config)
+
+        clients.run()
         update.run()
+        console.start()
 
     except KeyboardInterrupt:
         os._exit(1)

@@ -27,6 +27,7 @@ class Console(threading.Thread):
             self.update()
         signal.signal(signal.SIGWINCH, on_resize)
 
+
     def resetScreen(self):
         self.top_line = 1
 
@@ -54,6 +55,7 @@ class Console(threading.Thread):
                 self.animationPrev();
         
     def run(self):
+        self.update()
         while True:
             self.updateTerminal()
 
