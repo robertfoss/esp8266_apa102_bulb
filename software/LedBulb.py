@@ -1,7 +1,7 @@
 import struct
-import time
 import socket
-
+import time
+import operator
 
 class Mac(object):
     def __init__(self, bytestring=None):
@@ -16,13 +16,15 @@ class Mac(object):
 
 
 class LedBulb(object):
-    def __init__(self, config, bulb_id, ip, buf):
+    def __init__(self, config, ip, buf):
         self.config = config
-        self.bulb_id = bulb_id
+        self.bulbId = -1
+        self.sortOrder = -1
         self.ip = ip
         self.timestamp = time.time()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
         self.counter = 0
+        self.isMarked = False
 
         try:
             (hwVer, fwVer, port, pixels, strands, bpp, mac_bytes) = struct.unpack('=BHHHBB6s', buf)
@@ -55,6 +57,12 @@ class LedBulb(object):
         self.pixelBuffer = bytearray(self.strands * self.pixels * self.bpp)
 
     def send(self):
+        if (self.isMarked):
+            for i in range(0,self.strands * self.pixels):
+                self.pixelBuffer[i*self.bulb.bpp + 0] = self.config.brightness
+                self.pixelBuffer[i*self.bulb.bpp + 1] = 0
+                self.pixelBuffer[i*self.bulb.bpp + 2] = 255
+                self.pixelBuffer[i*self.bulb.bpp + 3] = 0
         try:
             self.socket.sendto(bytes(self.pixelBuffer), (self.ip, self.port))
         except OSError:
@@ -64,7 +72,7 @@ class LedBulb(object):
         self.timestamp = time.time()
 
     def __str__(self):
-        string = "#%d" % (self.bulb_id)
+        string = "#%d" % (self.bulbId)
 
         status = ""
         if self.timestamp + self.config.bulb_timeouts > time.time():
@@ -132,3 +140,12 @@ class LedBulb(object):
 class LedBulbs():
     def __init__(self):
         self.bulbs = dict()
+
+    def addBulb(self, config, ip, buf):
+        bulb = LedBulb(config, ip, buf)
+        bulb.bulbId = len(self.bulbs) + 1
+        bulb.sortOrder = len(self.bulbs) + 1
+        self.bulbs[ip] = bulb
+
+    def orderedBulbs(self):
+        return sorted(self.bulbs.values(), key=operator.attrgetter('sortOrder'))

@@ -8,10 +8,10 @@ from Config import Config
 
 
 class HeartbeatReciever(DatagramProtocol):
-    def __init__(self, config, console, bulbs):
+    def __init__(self, config, console, ledBulbs):
         self.config = config
         self.console = console
-        self.bulbs = bulbs
+        self.ledBulbs = ledBulbs
 
     def startProtocol(self):
         "Called when transport is connected"
@@ -25,29 +25,27 @@ class HeartbeatReciever(DatagramProtocol):
           self.heartbeat(ip, data)
 
     def heartbeat(self, ip, data):
-        if ip in self.bulbs:
-            self.bulbs[ip].ping()
+        if ip in self.ledBulbs:
+            self.ledBulbs.bulbs[ip].ping()
         else:
-            bulb = LedBulb(self.config, len(self.bulbs) + 1, ip, data)
-            self.bulbs[ip] = bulb
+            bulb = LedBulb(self.config, ip, data)
+            self.ledBulbs.addBulb()
             self.console.update()
 
 
 class animationThread(threading.Thread):
-    def __init__(self, config, bulbs, animationManager):
+    def __init__(self, config, ledBulbs, animationManager):
         threading.Thread.__init__(self)
         self.animations = animationManager
-        self.bulbs = bulbs
-
+        self.ledBulbs = ledBulbs
         self.config = config
 
     def processAllBulbs(self):
-        activeBulbs = list()
-        for ip in self.bulbs.values():
-            bulb = self.bulbs[ip]
+        activeBulbs = []
+        for bulb in self.ledBulbs.orderedBulbs():
             if (time.time() - bulb.timestamp < self.config.bulb_timeouts):
                 bulb.counter += 1
-                activeBulbs += bulb
+                activeBulbs += [ bulb ]
 
         self.animations.render(activeBulbs)
 
@@ -73,13 +71,13 @@ class ClientManager:
         self.config = config
         self.console = console
         self.animations = animationManager
-        self.bulbs = ledBulbs.bulbs
+        self.ledBulbs = ledBulbs
 
     def run(self):
-        reactor.listenMulticast(self.config.receive_port, HeartbeatReciever(self.config, self.console, self.bulbs), listenMultiple=True)
+        reactor.listenMulticast(self.config.receive_port, HeartbeatReciever(self.config, self.console, self.ledBulbs), listenMultiple=True)
         threading.Thread(target=reactor.run, args=(False,)).start()
 
-        anim = animationThread(self.config, self.bulbs, self.animations)
+        anim = animationThread(self.config, self.ledBulbs, self.animations)
         anim.start()
 
 

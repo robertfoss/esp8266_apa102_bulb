@@ -1,10 +1,11 @@
 from blessed import Terminal
 import threading
-import operator
 import signal
 
 import ClientManager
 import Config
+from LedBulb import LedBulb
+from LedBulb import LedBulbs
 
 
 SYMBOL_ARROW_LEFT = u'\u2190'
@@ -17,24 +18,29 @@ class Console(threading.Thread):
     def __init__(self, config, ledBulbs, animationManager):
         threading.Thread.__init__(self)
         self.config = config
-        self.bulbs = ledBulbs.bulbs
+        self.ledBulbs = ledBulbs
         self.animations = animationManager
 
         self.t = Terminal()
-        self.top_line = 1
+        self.topLine = 0
+        self.moveMode = False
+        self.markedLine = 2
 
         def on_resize(*args):
             self.update()
         signal.signal(signal.SIGWINCH, on_resize)
+        self.ledBulbs.addBulb(self.config, 1, bytearray())
+        self.ledBulbs.addBulb(self.config, 2, bytearray())
+        self.ledBulbs.addBulb(self.config, 3, bytearray())
 
 
     def resetScreen(self):
-        self.top_line = 1
+        self.topLine = 2
 
     def renderScreen(self):
         self.resetScreen()
         with self.t.fullscreen():
-            for bulb in (sorted(self.bulbs.values(), key=operator.attrgetter('bulb_id'))):
+            for bulb in self.ledBulbs.orderedBulbs():
                 self.printTop(str(bulb))
             self.printKeymap()
             self.printStatus()
@@ -46,18 +52,81 @@ class Console(threading.Thread):
         with self.t.cbreak():
             val = self.t.inkey()
             if val.name == 'KEY_UP':
-                self.brightnessUp()
+                if not self.moveMode:
+                    self.brightnessUp()
+                else:
+                    self.markUp()
             elif val.name == 'KEY_DOWN':
-                self.brightnessDown()
+                if not self.moveMode:
+                    self.brightnessDown()
+                else:
+                    self.markDown()
             elif val.name == 'KEY_RIGHT':
                 self.animationNext()
             elif val.name == 'KEY_LEFT':
                 self.animationPrev();
+            elif val.name == 'KEY_SUP':
+                if self.moveMode:
+                    self.moveUp()
+            elif val.name == 'KEY_SDOWN':
+                if self.moveMode:
+                    self.moveDown()
+            elif val in (" "):
+                self.toggleMoveMode()
+            else:
+                pass
         
     def run(self):
         self.update()
         while True:
             self.updateTerminal()
+
+    def markUp(self):
+        bulbs = self.ledBulbs.orderedBulbs()
+        bulbs[self.markedLine - 2 ].isMarked = False
+        self.markedLine -= 1
+        if self.markedLine < 2:
+            self.markedLine = 2
+        bulbs[self.markedLine - 2].isMarked = True and self.moveMode
+        self.renderScreen()
+
+    def markDown(self):
+        bulbs = self.ledBulbs.orderedBulbs()
+        bulbs[self.markedLine - 2 ].isMarked = False      
+        self.markedLine += 1
+        if self.markedLine > self.topLine - 1:
+            self.markedLine = self.topLine - 1
+        bulbs[self.markedLine - 2].isMarked = True and self.moveMode
+        self.renderScreen()
+
+    def moveUp(self):
+        bulbs = self.ledBulbs.orderedBulbs()
+        if self.markedLine - 2 - 1 < 0:
+            return 
+        self.printTop("up   markedLineIdx=%d newMarkedLineIdx=%d len(bulbs)=%d" %(self.markedLine-2, self.markedLine-2-1, len(bulbs)))
+        print(str(bulbs))
+        bulb1 = bulbs[self.markedLine - 2]
+        bulb2 = bulbs[self.markedLine - 2 - 1]
+        tmpOrder1 = bulb1.sortOrder
+        tmpOrder2 = bulb2.sortOrder
+        bulb1.sortOrder = tmpOrder2
+        bulb2.sortOrder = tmpOrder1
+        self.markedLine -= 1
+        self.renderScreen()
+
+    def moveDown(self):
+        bulbs = self.ledBulbs.orderedBulbs()
+        if self.markedLine - 2 + 2 > len(bulbs):
+            return 
+        print("down markedLineIdx=%d newMarkedLineIdx=%d len(bulbs)=%d" %(self.markedLine-2, self.markedLine-2+1, len(bulbs)))
+        bulb1 = bulbs[self.markedLine - 2]
+        bulb2 = bulbs[self.markedLine - 2 + 1]
+        tmpOrder1 = bulb1.sortOrder
+        tmpOrder2 = bulb2.sortOrder
+        bulb1.sortOrder = tmpOrder2
+        bulb2.sortOrder = tmpOrder1
+        self.markedLine += 1
+        self.renderScreen()
 
     def brightnessUp(self):
         if (self.config.brightness + 1 > 31):
@@ -85,10 +154,20 @@ class Console(threading.Thread):
         self.animations.currAnimation = idx
         self.renderScreen()
 
+    def toggleMoveMode(self):
+        if self.moveMode:
+            self.moveMode = False
+        else:
+            self.moveMode = True
+        self.renderScreen()
+
     def printTop(self, str):
-        with self.t.location(0, self.top_line):
-            self.top_line += 1
-            print(str)
+        with self.t.location(0, self.topLine):
+            if self.moveMode and self.markedLine == self.topLine:
+                print(self.t.reverse(str))
+            else:
+                print(str)
+            self.topLine += 1
 
     def printBottom(self, str):
         with self.t.location(0, self.t.height - 2):
