@@ -21,7 +21,13 @@ if __name__ == "__main__":
         update = UpdateServer(config)
 
         clients.run()
-        update.run()
+
+        try:
+            update.run()
+        except FileNotFoundError:
+            # No update files found.
+            pass
+
         console.start()
 
     except KeyboardInterrupt:
