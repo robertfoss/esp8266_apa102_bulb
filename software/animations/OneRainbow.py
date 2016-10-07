@@ -3,11 +3,11 @@ from colorsys import *
 from AbstractAnimation import AbstractAnimation
 
 
-class OneRainbow(AbstractAnimation):
+SIN_CHANGE_PER_TIME = 0.125
+SIN_CHANGE_PER_PX   = 3.0
+SIN_SIZE_PER_STRIP  = 20.0
 
-    SIN_CHANGE_PER_TIME = 0.5
-    SIN_CHANGE_PER_PX   = 3.0
-    SIN_SIZE_PER_STRIP  = 20.0
+class OneRainbow(AbstractAnimation):
 
     def __init__(self, config):
         super().__init__(config)
@@ -22,7 +22,7 @@ class OneRainbow(AbstractAnimation):
             bulbPi = 0
 
         for bulb in bulbs:
-            hue = math.sin((self.i * SIN_CHANGE_PER_TIME + bulbPi) / SIN_SIZE_PER_STRIP)
+            hue = math.sin((self.i * SIN_CHANGE_PER_TIME + bulb.bulbId * bulbPi) / SIN_SIZE_PER_STRIP)
             normalized_hue = (hue + 1.0) / 2 # Normalize to 0..1
             self.renderBulb(bulb, normalized_hue)
 

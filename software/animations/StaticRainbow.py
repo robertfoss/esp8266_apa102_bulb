@@ -3,11 +3,12 @@ from colorsys import *
 from AbstractAnimation import AbstractAnimation
 
 
+SIN_CHANGE_PER_TIME = 0.5
+SIN_CHANGE_PER_PX   = 3.0
+SIN_SIZE_PER_STRIP  = 20.0
+
 class StaticRainbow(AbstractAnimation):
 
-    SIN_CHANGE_PER_TIME = 0.5
-    SIN_CHANGE_PER_PX   = 3.0
-    SIN_SIZE_PER_STRIP  = 20.0
 
     def __init__(self, config):
         super().__init__(config)
@@ -28,7 +29,7 @@ class StaticRainbow(AbstractAnimation):
 	            g = int(g * 255)
 	            b = int(b * 255)
                 
-	            data[(x+y*bulb.pixels)*bulb.bpp + 0] = self.config.brightness
-	            data[(x+y*bulb.pixels)*bulb.bpp + 1] = b
-	            data[(x+y*bulb.pixels)*bulb.bpp + 2] = g
-	            data[(x+y*bulb.pixels)*bulb.bpp + 3] = r
+	            bulb.pixelBuffer[(x+y*bulb.pixels)*bulb.bpp + 0] = self.config.brightness
+	            bulb.pixelBuffer[(x+y*bulb.pixels)*bulb.bpp + 1] = b
+	            bulb.pixelBuffer[(x+y*bulb.pixels)*bulb.bpp + 2] = g
+	            bulb.pixelBuffer[(x+y*bulb.pixels)*bulb.bpp + 3] = r

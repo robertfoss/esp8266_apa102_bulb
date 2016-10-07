@@ -25,11 +25,10 @@ class HeartbeatReciever(DatagramProtocol):
           self.heartbeat(ip, data)
 
     def heartbeat(self, ip, data):
-        if ip in self.ledBulbs:
+        if ip in self.ledBulbs.bulbs:
             self.ledBulbs.bulbs[ip].ping()
         else:
-            bulb = LedBulb(self.config, ip, data)
-            self.ledBulbs.addBulb()
+            self.ledBulbs.addBulb(self.config, ip, data)
             self.console.update()
 
 

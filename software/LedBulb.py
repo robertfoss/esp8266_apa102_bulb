@@ -59,10 +59,10 @@ class LedBulb(object):
     def send(self):
         if (self.isMarked):
             for i in range(0,self.strands * self.pixels):
-                self.pixelBuffer[i*self.bulb.bpp + 0] = self.config.brightness
-                self.pixelBuffer[i*self.bulb.bpp + 1] = 0
-                self.pixelBuffer[i*self.bulb.bpp + 2] = 255
-                self.pixelBuffer[i*self.bulb.bpp + 3] = 0
+                self.pixelBuffer[i * self.bpp + 0] = self.config.brightness
+                self.pixelBuffer[i * self.bpp + 1] = 0
+                self.pixelBuffer[i * self.bpp + 2] = 255
+                self.pixelBuffer[i * self.bpp + 3] = 0
         try:
             self.socket.sendto(bytes(self.pixelBuffer), (self.ip, self.port))
         except OSError:

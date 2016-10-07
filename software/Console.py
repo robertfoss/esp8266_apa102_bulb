@@ -29,9 +29,6 @@ class Console(threading.Thread):
         def on_resize(*args):
             self.update()
         signal.signal(signal.SIGWINCH, on_resize)
-        self.ledBulbs.addBulb(self.config, 1, bytearray())
-        self.ledBulbs.addBulb(self.config, 2, bytearray())
-        self.ledBulbs.addBulb(self.config, 3, bytearray())
 
 
     def resetScreen(self):
@@ -103,7 +100,6 @@ class Console(threading.Thread):
         bulbs = self.ledBulbs.orderedBulbs()
         if self.markedLine - 2 - 1 < 0:
             return 
-        self.printTop("up   markedLineIdx=%d newMarkedLineIdx=%d len(bulbs)=%d" %(self.markedLine-2, self.markedLine-2-1, len(bulbs)))
         print(str(bulbs))
         bulb1 = bulbs[self.markedLine - 2]
         bulb2 = bulbs[self.markedLine - 2 - 1]
@@ -111,6 +107,8 @@ class Console(threading.Thread):
         tmpOrder2 = bulb2.sortOrder
         bulb1.sortOrder = tmpOrder2
         bulb2.sortOrder = tmpOrder1
+        bulb1.isMarked = False 
+        bulb2.isMarked = True
         self.markedLine -= 1
         self.renderScreen()
 
@@ -118,13 +116,14 @@ class Console(threading.Thread):
         bulbs = self.ledBulbs.orderedBulbs()
         if self.markedLine - 2 + 2 > len(bulbs):
             return 
-        print("down markedLineIdx=%d newMarkedLineIdx=%d len(bulbs)=%d" %(self.markedLine-2, self.markedLine-2+1, len(bulbs)))
         bulb1 = bulbs[self.markedLine - 2]
         bulb2 = bulbs[self.markedLine - 2 + 1]
         tmpOrder1 = bulb1.sortOrder
         tmpOrder2 = bulb2.sortOrder
         bulb1.sortOrder = tmpOrder2
         bulb2.sortOrder = tmpOrder1
+        bulb1.isMarked = False 
+        bulb2.isMarked = True
         self.markedLine += 1
         self.renderScreen()
 
@@ -157,8 +156,11 @@ class Console(threading.Thread):
     def toggleMoveMode(self):
         if self.moveMode:
             self.moveMode = False
+            for bulb in self.ledBulbs.bulbs.values():
+                bulb.isMarked = False 
         else:
             self.moveMode = True
+            self.ledBulbs.orderedBulbs()[self.markedLine - 2].isMarked = True
         self.renderScreen()
 
     def printTop(self, str):
