@@ -1,2 +1,9 @@
-*~
-*.bak
+*.pioenvs
+*.clang_complete
+*.gcc-flags.json
+*.piolibdeps
+*__pycache__
+*.Log
+*travis.yml
+*.*~
+*bak
