@@ -1,6 +1,7 @@
 from blessed import Terminal
 import threading
 import signal
+import time
 
 import ClientManager
 import Config
@@ -13,6 +14,11 @@ SYMBOL_ARROW_UP = u'\u2191'
 SYMBOL_ARROW_RIGHT = u'\u2192'
 SYMBOL_ARROW_DOWN = u'\u2193'
 SYMBOL_ARROW_LEFT_RIGHT = u'\u2194'
+
+def threaded(fn):
+    def wrapper(*args, **kwargs):
+        threading.Thread(target=fn, args=args, kwargs=kwargs).start()
+    return wrapper
 
 class Console(threading.Thread):
     def __init__(self, config, ledBulbs, animationManager):
@@ -30,6 +36,8 @@ class Console(threading.Thread):
             self.update()
         signal.signal(signal.SIGWINCH, on_resize)
 
+        self.updateThread()
+
 
     def resetScreen(self):
         self.topLine = 2
@@ -44,6 +52,13 @@ class Console(threading.Thread):
 
     def update(self):
         self.renderScreen()
+
+    @threaded
+    def updateThread(self):
+        while True:
+            self.update()
+            time.sleep(0.5);
+
 
     def updateTerminal(self):
         with self.t.cbreak():
