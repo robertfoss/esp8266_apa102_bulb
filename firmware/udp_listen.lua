@@ -36,7 +36,7 @@ end
 
 function udp_listen_init()
   fillColor(COLOR_OFF)
-  tmr.alarm(1, 250, tmr.ALARM_AUTO, timeoutClear)
+  tmr.alarm(1, 5000, tmr.ALARM_AUTO, timeoutClear)
 end
 
 function udp_listen_run()
