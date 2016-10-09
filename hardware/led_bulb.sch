@@ -2415,12 +2415,6 @@ Wire Wire Line
 	7550 4500 7650 4500
 Wire Wire Line
 	7550 4600 7650 4600
-$Sheet
-S 2500 -850 850  850 
-U 57994C96
-F0 "apa102" 60
-F1 "apa102.sch" 60
-$EndSheet
 $Comp
 L Q_NPN_BEC Q2
 U 1 1 57AF6AAE
