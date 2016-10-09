@@ -17,7 +17,7 @@ class OneRainbow(AbstractAnimation):
         self.i += 1
         numBulbs = len(bulbs)
         if (numBulbs != 0):
-            bulbPi = math.pi / numBulbs
+            bulbPi = 2.0*math.pi / numBulbs
         else:
             bulbPi = 0
 
