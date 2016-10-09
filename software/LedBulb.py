@@ -82,58 +82,56 @@ class LedBulb(object):
 
         string += status.center(6)
 
+        netAddr = ""
         if hasattr(self, 'ip'):
-            string += str(self.ip)
+            netAddr += str(self.ip)
         else:
-            string += "0.0.0.0"
+            netAddr += "0.0.0.0"
 
         if hasattr(self, 'port'):
-            string += ":" + str(self.port)
+            netAddr += ":" + str(self.port)
         else:
-            string += ":0"
-
+            netAddr += ":0"
+        string += netAddr.ljust(18)
         string += "  "
 
+        mac = ""
         if hasattr(self, 'mac'):
-            string += str(self.mac)
+            mac += str(self.mac)
         else:
-            string += "00:00:00:00:00:00"
+            mac += "00:00:00:00:00:00"
+        string += mac
 
-        string += "  "
+#        string += "  "
+#        if hasattr(self, 'hwVer'):
+#            string += "hw_version=" + str(self.hwVer)
+#        else:
+#            string += "hw_version=?"
 
-        if hasattr(self, 'hwVer'):
-            string += "hw_version=" + str(self.hwVer)
-        else:
-            string += "hw_version=?"
+#        string += " "
+#        if hasattr(self, 'fwVer'):
+#            string += "fw_version=" + str(self.fwVer)
+#        else:
+#            string += "fw_version=?"
 
-        string += " "
+#        string += " "
+#        if hasattr(self, 'pixels'):
+#            string += "pixels=" + str(self.pixels)
+#        else:
+#            string += "pixels=?"
 
-        if hasattr(self, 'fwVer'):
-            string += "fw_version=" + str(self.fwVer)
-        else:
-            string += "fw_version=?"
+#        string += " "
+#        if hasattr(self, 'strands'):
+#            string += "strands=" + str(self.strands)
+#        else:
+#            string += "strands=0"
 
-        string += " "
-
-        if hasattr(self, 'pixels'):
-            string += "pixels=" + str(self.pixels)
-        else:
-            string += "pixels=?"
-
-        string += " "
-
-        if hasattr(self, 'strands'):
-            string += "strands=" + str(self.strands)
-        else:
-            string += "strands=0"
-
-        string += " "
-
-        if hasattr(self, 'bpp'):
-            string += "bytes/pixel=" + str(self.bpp)
-        else:
-            string += "bytes/pixel=?"
-
+#        string += " "
+#        if hasattr(self, 'bpp'):
+#            string += "bytes/pixel=" + str(self.bpp)
+#        else:
+#            string += "bytes/pixel=?"
+#
         return string
 
 
