@@ -115,7 +115,6 @@ class Console(threading.Thread):
         bulbs = self.ledBulbs.orderedBulbs()
         if self.markedLine - 2 - 1 < 0:
             return 
-        print(str(bulbs))
         bulb1 = bulbs[self.markedLine - 2]
         bulb2 = bulbs[self.markedLine - 2 - 1]
         tmpOrder1 = bulb1.sortOrder
