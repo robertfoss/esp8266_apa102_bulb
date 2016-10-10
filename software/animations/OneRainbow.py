@@ -17,12 +17,12 @@ class OneRainbow(AbstractAnimation):
         self.i += 1
         numBulbs = len(bulbs)
         if (numBulbs != 0):
-            bulbPi = 2.0*math.pi / numBulbs
+            bulbPi = (2.0 * math.pi) / numBulbs
         else:
             bulbPi = 0
 
         for bulb in bulbs:
-            hue = math.sin((self.i * SIN_CHANGE_PER_TIME + bulb.bulbId * bulbPi) / SIN_SIZE_PER_STRIP)
+            hue = math.sin((bulb.sortOrder * bulbPi) + ((self.i * SIN_CHANGE_PER_TIME) / SIN_SIZE_PER_STRIP))
             normalized_hue = (hue + 1.0) / 2 # Normalize to 0..1
             self.renderBulb(bulb, normalized_hue)
 
