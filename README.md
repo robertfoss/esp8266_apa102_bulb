@@ -9,7 +9,7 @@ ESP8266 based animated APA102 bulbs.
 
 ## Assembly
 
-![Alt text](/../media/v2_95pct_assembled.jpg?raw=true "v2: 95% assembled")
+![Alt text](/../media/v4_95pct_assembled.jpg?raw=true "v4: 95% assembled")
 ![Alt text](/../media/v2_hanging.jpg?raw=true "v2: Hanging and running over WiFi")
 ![Alt text](/../media/v2_running.jpg?raw=true "v2: Assembled and running over WiFi")
 
