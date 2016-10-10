@@ -72,7 +72,13 @@ class LedBulb(object):
         self.timestamp = time.time()
 
     def __str__(self):
-        string = "#%d" % (self.bulbId)
+        string = ""
+#        if self.isMarked:
+#            string += " -X- "
+#        else:
+#            string += " - - "
+
+        string += "#%d" % (self.bulbId)
 
         status = ""
         if self.timestamp + self.config.bulb_timeouts > time.time():

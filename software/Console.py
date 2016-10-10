@@ -121,8 +121,8 @@ class Console(threading.Thread):
         tmpOrder2 = bulb2.sortOrder
         bulb1.sortOrder = tmpOrder2
         bulb2.sortOrder = tmpOrder1
-        bulb1.isMarked = False 
-        bulb2.isMarked = True
+        bulb1.isMarked = True 
+        bulb2.isMarked = False
         self.markedLine -= 1
         self.renderScreen()
 
@@ -136,8 +136,8 @@ class Console(threading.Thread):
         tmpOrder2 = bulb2.sortOrder
         bulb1.sortOrder = tmpOrder2
         bulb2.sortOrder = tmpOrder1
-        bulb1.isMarked = False 
-        bulb2.isMarked = True
+        bulb1.isMarked = True 
+        bulb2.isMarked = False
         self.markedLine += 1
         self.renderScreen()
 
