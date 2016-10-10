@@ -24,7 +24,7 @@ class LedBulb(object):
         self.timestamp = time.time()
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
         self.counter = 0
-        self.isMarked = False
+        self.marked = 0
 
         try:
             (hwVer, fwVer, port, pixels, strands, bpp, mac_bytes) = struct.unpack('=BHHHBB6s', buf)
@@ -57,12 +57,18 @@ class LedBulb(object):
         self.pixelBuffer = bytearray(self.strands * self.pixels * self.bpp)
 
     def send(self):
-        if (self.isMarked):
+        if self.marked == 1:
+            for i in range(0,self.strands * self.pixels):
+                self.pixelBuffer[i * self.bpp + 0] = self.config.brightness
+                self.pixelBuffer[i * self.bpp + 1] = 255
+                self.pixelBuffer[i * self.bpp + 2] = 0
+                self.pixelBuffer[i * self.bpp + 3] = 0
+        elif self.marked == 2:
             for i in range(0,self.strands * self.pixels):
                 self.pixelBuffer[i * self.bpp + 0] = self.config.brightness
                 self.pixelBuffer[i * self.bpp + 1] = 0
-                self.pixelBuffer[i * self.bpp + 2] = 255
-                self.pixelBuffer[i * self.bpp + 3] = 0
+                self.pixelBuffer[i * self.bpp + 2] = 0
+                self.pixelBuffer[i * self.bpp + 3] = 255
         try:
             self.socket.sendto(bytes(self.pixelBuffer), (self.ip, self.port))
         except OSError:
@@ -73,10 +79,12 @@ class LedBulb(object):
 
     def __str__(self):
         string = ""
-#        if self.isMarked:
-#            string += " -X- "
-#        else:
-#            string += " - - "
+        if self.marked == 1:
+            string += " -X- "
+        elif self.marked == 2:
+            string += " -|- "
+        else:
+            string += " - - "
 
         string += "#%d" % (self.bulbId)
 

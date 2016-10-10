@@ -46,7 +46,7 @@ class Console(threading.Thread):
         self.resetScreen()
         with self.t.fullscreen():
             for bulb in self.ledBulbs.orderedBulbs():
-                self.printTop(str(bulb))
+                self.printTop(str(bulb), bulb.marked != 0)
             self.printKeymap()
             self.printStatus()
 
@@ -64,29 +64,35 @@ class Console(threading.Thread):
         with self.t.cbreak():
             val = self.t.inkey()
             if val.name == 'KEY_UP':
-                if not self.moveMode:
-                    self.brightnessUp()
-                else:
-                    self.markUp()
+                self.keyUp()
             elif val.name == 'KEY_DOWN':
-                if not self.moveMode:
-                    self.brightnessDown()
-                else:
-                    self.markDown()
+                self.keyDown()
             elif val.name == 'KEY_RIGHT':
                 self.animationNext()
             elif val.name == 'KEY_LEFT':
-                self.animationPrev();
-            elif val.name == 'KEY_SUP':
-                if self.moveMode:
-                    self.moveUp()
-            elif val.name == 'KEY_SDOWN':
-                if self.moveMode:
-                    self.moveDown()
+                self.animationPrev()
+            elif val.name == 'KEY_ESCAPE':
+                self.esc()
             elif val in (" "):
                 self.toggleMoveMode()
             else:
                 pass
+
+    def esc(self):
+        self.toggleMoveMode(0)
+        self.renderScreen()
+
+    def keyUp(self):
+        if self.moveMode == 0:
+            self.brightnessUp()
+        else:
+            self.markUp()
+
+    def keyDown(self):
+        if self.moveMode == 0:
+            self.brightnessDown()
+        else:
+            self.markDown()
         
     def run(self):
         self.update()
@@ -95,50 +101,50 @@ class Console(threading.Thread):
 
     def markUp(self):
         bulbs = self.ledBulbs.orderedBulbs()
-        bulbs[self.markedLine - 2 ].isMarked = False
+        bulb1 = bulbs[self.markedLine - 2]
+        if bulb1.marked == 2:
+            bulb2 = None
+            for bulb in bulbs:
+                if bulb.marked == 1:
+                    bulb2 = bulb
+            for bulb in bulbs:
+                bulb.marked = 0
+
+            if bulb2 != None:
+                bulb2.marked = 1
+            else:
+                bulb1.marked = 1
+        else:
+            for bulb in bulbs:
+                bulb.marked = 0
         self.markedLine -= 1
         if self.markedLine < 2:
             self.markedLine = 2
-        bulbs[self.markedLine - 2].isMarked = True and self.moveMode
+        bulbs[self.markedLine - 2].marked = self.moveMode
         self.renderScreen()
 
     def markDown(self):
         bulbs = self.ledBulbs.orderedBulbs()
-        bulbs[self.markedLine - 2 ].isMarked = False      
+        bulb1 = bulbs[self.markedLine - 2]
+        if bulb1.marked == 2:
+            bulb2 = None
+            for bulb in bulbs:
+                if bulb.marked == 1:
+                    bulb2 = bulb
+            for bulb in bulbs:
+                bulb.marked = 0
+
+            if bulb2 != None:
+                bulb2.marked = 1
+            else:
+                bulb1.marked = 1
+        else:
+            for bulb in bulbs:
+                bulb.marked = 0
         self.markedLine += 1
         if self.markedLine > self.topLine - 1:
             self.markedLine = self.topLine - 1
-        bulbs[self.markedLine - 2].isMarked = True and self.moveMode
-        self.renderScreen()
-
-    def moveUp(self):
-        bulbs = self.ledBulbs.orderedBulbs()
-        if self.markedLine - 2 - 1 < 0:
-            return 
-        bulb1 = bulbs[self.markedLine - 2]
-        bulb2 = bulbs[self.markedLine - 2 - 1]
-        tmpOrder1 = bulb1.sortOrder
-        tmpOrder2 = bulb2.sortOrder
-        bulb1.sortOrder = tmpOrder2
-        bulb2.sortOrder = tmpOrder1
-        bulb1.isMarked = True 
-        bulb2.isMarked = False
-        self.markedLine -= 1
-        self.renderScreen()
-
-    def moveDown(self):
-        bulbs = self.ledBulbs.orderedBulbs()
-        if self.markedLine - 2 + 2 > len(bulbs):
-            return 
-        bulb1 = bulbs[self.markedLine - 2]
-        bulb2 = bulbs[self.markedLine - 2 + 1]
-        tmpOrder1 = bulb1.sortOrder
-        tmpOrder2 = bulb2.sortOrder
-        bulb1.sortOrder = tmpOrder2
-        bulb2.sortOrder = tmpOrder1
-        bulb1.isMarked = True 
-        bulb2.isMarked = False
-        self.markedLine += 1
+        bulbs[self.markedLine - 2].marked = self.moveMode
         self.renderScreen()
 
     def brightnessUp(self):
@@ -167,19 +173,24 @@ class Console(threading.Thread):
         self.animations.currAnimation = idx
         self.renderScreen()
 
-    def toggleMoveMode(self):
-        if self.moveMode:
-            self.moveMode = False
-            for bulb in self.ledBulbs.bulbs.values():
-                bulb.isMarked = False 
+    def toggleMoveMode(self, targetMode=None):
+        if targetMode != None:
+            self.moveMode = targetMode
         else:
-            self.moveMode = True
-            self.ledBulbs.orderedBulbs()[self.markedLine - 2].isMarked = True
+            self.moveMode = (self.moveMode + 1) % 3
+
+        if self.moveMode == 0:
+            for bulb in self.ledBulbs.bulbs.values():
+                bulb.marked = self.moveMode
+        elif self.moveMode == 1:
+            self.ledBulbs.orderedBulbs()[self.markedLine - 2].marked = self.moveMode
+        elif self.moveMode == 2:
+            self.ledBulbs.orderedBulbs()[self.markedLine - 2].marked = self.moveMode
         self.renderScreen()
 
-    def printTop(self, str):
+    def printTop(self, str, revLine=False):
         with self.t.location(0, self.topLine):
-            if self.moveMode and self.markedLine == self.topLine:
+            if revLine:
                 print(self.t.reverse(str))
             else:
                 print(str)
