@@ -21,7 +21,7 @@ ESP8266 based animated APA102 bulbs.
 
 ## Changelog
 
-v4.1
+v4.1:
  * Added missing silkscreen
  * Switched from EBC to BEC NPN transistor, to match S8050 part.
  * Changed C7/C8/C10 footprints from 0603->0805
