@@ -57,7 +57,13 @@ class LedBulb(object):
         self.pixelBuffer = bytearray(self.strands * self.pixels * self.bpp)
 
     def send(self):
-        if self.marked == 1:
+        if self.marked == -1:
+            for i in range(0,self.strands * self.pixels):
+                self.pixelBuffer[i * self.bpp + 0] = 0
+                self.pixelBuffer[i * self.bpp + 1] = 0
+                self.pixelBuffer[i * self.bpp + 2] = 0
+                self.pixelBuffer[i * self.bpp + 3] = 0
+        elif self.marked == 1:
             for i in range(0,self.strands * self.pixels):
                 self.pixelBuffer[i * self.bpp + 0] = self.config.brightness
                 self.pixelBuffer[i * self.bpp + 1] = 255
@@ -116,17 +122,17 @@ class LedBulb(object):
             mac += "00:00:00:00:00:00"
         string += mac
 
-#        string += "  "
-#        if hasattr(self, 'hwVer'):
-#            string += "hw_version=" + str(self.hwVer)
-#        else:
-#            string += "hw_version=?"
+        string += " "
+        if hasattr(self, 'hwVer'):
+            string += "HW=" + str(self.hwVer)
+        else:
+            string += "HW=?"
 
-#        string += " "
-#        if hasattr(self, 'fwVer'):
-#            string += "fw_version=" + str(self.fwVer)
-#        else:
-#            string += "fw_version=?"
+        string += " "
+        if hasattr(self, 'fwVer'):
+            string += "FW=" + str(self.fwVer)
+        else:
+            string += "FW=?"
 
 #        string += " "
 #        if hasattr(self, 'pixels'):
@@ -160,4 +166,5 @@ class LedBulbs():
         self.bulbs[ip] = bulb
 
     def orderedBulbs(self):
-        return sorted(self.bulbs.values(), key=operator.attrgetter('sortOrder'))
+        sortedList = sorted(self.bulbs.values(), key=operator.attrgetter('sortOrder'))
+        return [bulb for bulb in sortedList if bulb.marked != -1]
