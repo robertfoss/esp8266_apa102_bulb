@@ -6,6 +6,7 @@ from AbstractAnimation import AbstractAnimation
 SIN_CHANGE_PER_TIME = 0.125
 SIN_CHANGE_PER_PX   = 3.0
 SIN_SIZE_PER_STRIP  = 20.0
+RAINBOW_PCT         = 0.2
 
 class OneRainbow(AbstractAnimation):
 
@@ -17,7 +18,7 @@ class OneRainbow(AbstractAnimation):
         self.i += 1
         numBulbs = len(bulbs)
         if (numBulbs != 0):
-            bulbPi = (2.0 * math.pi) / numBulbs
+            bulbPi = (RAINBOW_PCT * 2.0 * math.pi) / numBulbs
         else:
             bulbPi = 0
 
