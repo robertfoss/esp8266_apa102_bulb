@@ -26,6 +26,7 @@ class Console(threading.Thread):
         self.config = config
         self.ledBulbs = ledBulbs
         self.animations = animationManager
+        self.updateLock = threading.Lock()
 
         self.t = Terminal()
         self.topLine = 0
@@ -43,12 +44,13 @@ class Console(threading.Thread):
         self.topLine = 2
 
     def renderScreen(self):
-        self.resetScreen()
-        with self.t.fullscreen():
-            for bulb in self.ledBulbs.orderedBulbs():
-                self.printTop(str(bulb), bulb.marked != 0)
-            self.printKeymap()
-            self.printStatus()
+        with self.updateLock:
+            self.resetScreen()
+            with self.t.fullscreen():
+                for bulb in self.ledBulbs.orderedBulbs():
+                    self.printTop(str(bulb), bulb.marked != 0)
+                self.printKeymap()
+                self.printStatus()
 
     def update(self):
         self.renderScreen()
@@ -57,7 +59,7 @@ class Console(threading.Thread):
     def updateThread(self):
         while True:
             self.update()
-            time.sleep(0.5);
+            time.sleep(0.250);
 
 
     def updateTerminal(self):
@@ -74,7 +76,7 @@ class Console(threading.Thread):
             elif val.name == 'KEY_ESCAPE':
                 self.esc()
             elif val in (" "):
-                self.toggleMoveMode()
+                self.moveMode()
             else:
                 pass
 
@@ -173,7 +175,7 @@ class Console(threading.Thread):
         self.animations.currAnimation = idx
         self.renderScreen()
 
-    def toggleMoveMode(self, targetMode=None):
+    def moveMode(self, targetMode=None):
         if targetMode != None:
             self.moveMode = targetMode
         else:
