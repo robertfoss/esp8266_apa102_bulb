@@ -7,8 +7,8 @@ SIN_CHANGE_PER_TIME = 0.5
 SIN_CHANGE_PER_PX   = 3.0
 SIN_SIZE_PER_STRIP  = 20.0
 
-EVENT_THRESHOLD = 10.0
-EVENT_BRIGHTNESS = 2.0
+EVENT_THRESHOLD = 5.0
+EVENT_BRIGHTNESS = 1.33
 
 class AudioRainbow(AbstractAnimation):
 
@@ -20,17 +20,18 @@ class AudioRainbow(AbstractAnimation):
         nbrBulbs = len(bulbs)
         intensities = self.audio.getBinsIntensity(nbrBulbs)
         for idx in range(0, nbrBulbs):
-            event = intensities[idx] >= EVENT_THRESHOLD
-            self.renderBulb(bulbs[idx], event)
+            brightness = self.config.brightness
+            intensity = intensities[idx]
+            if intensity >= EVENT_THRESHOLD:
+                intensityModifier = EVENT_BRIGHTNESS * (1 + (intensity - EVENT_THRESHOLD)/5)
+                brightness = int(brightness * EVENT_BRIGHTNESS * intensityModifier)
+                if brightness > 31:
+                    brightness = 31
 
-    def renderBulb(self, bulb, event):
+            self.renderBulb(bulbs[idx], brightness)
+
+    def renderBulb(self, bulb, brightness):
         i = bulb.counter
-
-        brightness = self.config.brightness
-        if event:
-            brightness = int(EVENT_BRIGHTNESS * brightness)
-            if brightness > 31:
-                brightness = 31
 
         for y in range(0, bulb.strands):
             for x in range(0, bulb.pixels):
