@@ -1,8 +1,6 @@
 import glob, os
 import importlib
 import Config
-from animations.SyncdRainbow import SyncdRainbow
-from animations.StaticRainbow import StaticRainbow
 
 class AnimationManager():
 
