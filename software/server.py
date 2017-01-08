@@ -35,4 +35,4 @@ if __name__ == "__main__":
 
     except:
         print("Unexpected error: %s" % sys.exc_info()[0])
-        raise
+        os._exit(1)
