@@ -1,6 +1,6 @@
 import math
 from colorsys import *
-from AbstractAnimation import AbstractAnimation
+from animations.AbstractAnimation import AbstractAnimation
 from animations.inputs.AudioInput import AudioInput
 
 SIN_CHANGE_PER_TIME = 0.5
@@ -16,11 +16,11 @@ class AudioRainbow(AbstractAnimation):
         super().__init__(config)
 
     def start(self):
-        print("AudioRainbow.start()")
+        super.start()
         self.audio = AudioInput()
 
     def stop(self):
-        print("AudioRainbow.stop()")
+        print("")
         self.audio.stop()
         self.audio = None
 

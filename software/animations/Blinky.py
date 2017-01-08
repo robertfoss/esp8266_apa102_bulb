@@ -1,6 +1,6 @@
 import math
 from colorsys import *
-from AbstractAnimation import AbstractAnimation
+from animations.AbstractAnimation import AbstractAnimation
 
 
 SIN_CHANGE_PER_TIME = 0.125
