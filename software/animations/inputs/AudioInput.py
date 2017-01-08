@@ -24,7 +24,7 @@ CHANNELS = 1
 BUF_SIZE = 2 * CHANNELS * nFFT
 FORMAT = pyaudio.paInt16
 RATE = 48000
-FFT_HIST_LENGTH = 2.0
+FFT_HIST_LENGTH = 1.25
 
 
 class ProcessThread(threading.Thread):
