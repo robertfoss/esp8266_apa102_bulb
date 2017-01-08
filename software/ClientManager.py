@@ -32,7 +32,7 @@ class HeartbeatReciever(DatagramProtocol):
             self.console.update()
 
 
-class animationThread(threading.Thread):
+class AnimationThread(threading.Thread):
     def __init__(self, config, ledBulbs, animationManager):
         threading.Thread.__init__(self)
         self.animations = animationManager
@@ -76,7 +76,5 @@ class ClientManager:
         reactor.listenMulticast(self.config.receive_port, HeartbeatReciever(self.config, self.console, self.ledBulbs), listenMultiple=True)
         threading.Thread(target=reactor.run, args=(False,)).start()
 
-        anim = animationThread(self.config, self.ledBulbs, self.animations)
+        anim = AnimationThread(self.config, self.ledBulbs, self.animations)
         anim.start()
-
-
