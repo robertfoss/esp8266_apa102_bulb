@@ -6,7 +6,10 @@ class AnimationManager():
 
     def __init__(self, config):
         self.config = config
+        self.activeIdx = 0
         self.loadAnimations()
+        self.anim = self.animations[self.activeIdx]
+        self.anim.start()
 
     def loadAnimations(self):
         self.animations = []
@@ -22,11 +25,33 @@ class AnimationManager():
             animation = animationClass(self.config)
             self.animations += [ animation ]
 
-        self.currAnimation = 0
-        self.numAnimations = len(self.animations)
+        self.numAnims = len(self.animations)
 
     def animation(self):
-        return self.animations[self.currAnimation]
+        return self.anim
+
+    def startAnim(self):
+        self.anim.start()
+
+    def stopAnim(self):
+        self.anim.stop()
+
+    def switchAnim(self, idx):
+        oldAnim = self.anim
+        nextIdx = idx % self.numAnims
+        nextAnim = self.animations[nextIdx]
+        nextAnim.start()
+        self.activeIdx = nextIdx
+        self.anim = nextAnim
+        oldAnim.stop()
 
     def render(self, bulbs):
-        self.animation().render(bulbs)
+        self.anim.render(bulbs)
+
+    def next(self):
+        idx = (self.activeIdx + 1) % self.numAnims
+        self.switchAnim(idx)
+
+    def prev(self):
+        idx = (self.activeIdx - 1) % self.numAnims
+        self.switchAnim(idx)

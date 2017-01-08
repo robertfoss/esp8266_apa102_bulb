@@ -95,7 +95,7 @@ class Console(threading.Thread):
             self.brightnessDown()
         else:
             self.markDown()
-        
+
     def run(self):
         self.update()
         while True:
@@ -164,15 +164,11 @@ class Console(threading.Thread):
             self.renderScreen()
 
     def animationNext(self):
-        idx = self.animations.currAnimation
-        idx = (idx + 1) % self.animations.numAnimations
-        self.animations.currAnimation = idx
+        self.animations.next();
         self.renderScreen()
 
     def animationPrev(self):
-        idx = self.animations.currAnimation
-        idx = (idx - 1) % self.animations.numAnimations
-        self.animations.currAnimation = idx
+        self.animations.prev()
         self.renderScreen()
 
     def moveMode(self, targetMode=None):
@@ -220,4 +216,3 @@ class Console(threading.Thread):
             status += ("HTTP port: " + self.t.bold + "%s   " + self.t.normal)  % (str(self.config.http_port).ljust(4))
             status += ("Receive port: " + self.t.bold + "%s   " + self.t.normal)  % (str(self.config.receive_port).ljust(4))
             print(status)
-

@@ -14,7 +14,15 @@ class AudioRainbow(AbstractAnimation):
 
     def __init__(self, config):
         super().__init__(config)
+
+    def start(self):
+        print("AudioRainbow.start()")
         self.audio = AudioInput()
+
+    def stop(self):
+        print("AudioRainbow.stop()")
+        self.audio.stop()
+        self.audio = None
 
     def render(self, bulbs):
         nbrBulbs = len(bulbs)
@@ -41,7 +49,7 @@ class AudioRainbow(AbstractAnimation):
 	            r = int(r * 255)
 	            g = int(g * 255)
 	            b = int(b * 255)
-                
+
 	            bulb.pixelBuffer[(x+y*bulb.pixels)*bulb.bpp + 0] = brightness
 	            bulb.pixelBuffer[(x+y*bulb.pixels)*bulb.bpp + 1] = b
 	            bulb.pixelBuffer[(x+y*bulb.pixels)*bulb.bpp + 2] = g

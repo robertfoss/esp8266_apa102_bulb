@@ -31,9 +31,12 @@ class ProcessThread(threading.Thread):
     def __init__(self, audio):
         threading.Thread.__init__(self)
         self.audio = audio
+        self.isRunning = False
+        self.isStopped = True
 
     def run(self):
-        while True:
+        self.isRunning = True
+        while self.isRunning:
             start_time = time.time()
             self.audio.process()
             self.audio.getBinsIntensity(3)
@@ -41,6 +44,7 @@ class ProcessThread(threading.Thread):
             time_to_wait = min(RERFESH_TIME, now - start_time + 1.0 / FPS)
 #            print("time_to_wait: %s" % str(time_to_wait))
             time.sleep(time_to_wait)
+        self.isStopped = True
 
 class AudioInput():
 
@@ -60,6 +64,15 @@ class AudioInput():
         self.thread = ProcessThread(self)
         self.thread.start()
 
+    def stop(self):
+        self.thread.isRunning = False
+        while (self.thread.isStopped != True):
+            time.sleep(1);
+        self.thread = None
+
+        self.stream.stop_stream()
+        self.stream.close()
+        self.p.terminate()
 
     def addHistoricalFFT(self, fft):
         now = time.time()
@@ -94,7 +107,7 @@ class AudioInput():
         idx = np.argmax(fft)
         mainHz = freqs[idx]
         return mainHz
-        
+
     def process(self):
         N = int(max(self.stream.get_read_available() / nFFT, 1) * nFFT)
         data = self.stream.read(N)
@@ -107,7 +120,7 @@ class AudioInput():
         # Unpack data, LRLRLR...
         y = np.array(struct.unpack("%dh" % (N * CHANNELS), data)) / self.MAX_y
         Y_fft = np.fft.fft(y, 2*nFFT)
-        
+
         self.FFT = abs(Y_fft[:nFFT])
         self.addHistoricalFFT(self.FFT)
 
@@ -206,15 +219,15 @@ class AudioInput():
         for idx in range(nBulbs):
             if (idx < len(startBin) -1):
                 endBin[idx] = startBin[idx+1] - 1
-            else: 
+            else:
                 endBin[idx] = nFFT - 1
 #        print("endBin = %s" % str(endBin))
-        
+
         bins = [(int(x), int(y)) for x, y in zip(startBin, endBin)]
 #        print("bins = %s" % str(bins))
 
         return bins
-        
+
     def getFFTBins(self, nBulbs):
         if nBulbs == 0:
             return []
