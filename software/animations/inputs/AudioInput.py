@@ -54,11 +54,11 @@ class AudioInput():
         self.diffFFT = np.zeros(nFFT)
         self.histFFT = list()
         self.p = pyaudio.PyAudio()
-        self.stream = self.p.open(format=FORMAT,
-            channels=CHANNELS,
-            rate=RATE,
-            input=True,
-            frames_per_buffer=BUF_SIZE)
+        self.stream = self.p.open(format = FORMAT,
+            channels = CHANNELS,
+            rate = RATE,
+            input = True,
+            frames_per_buffer = BUF_SIZE)
 
         self.MAX_y = 2.0 ** (self.p.get_sample_size(FORMAT) * (8 - 2))
         self.thread = ProcessThread(self)
