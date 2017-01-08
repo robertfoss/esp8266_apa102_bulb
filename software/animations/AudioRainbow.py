@@ -7,7 +7,7 @@ SIN_CHANGE_PER_TIME = 0.5
 SIN_CHANGE_PER_PX   = 3.0
 SIN_SIZE_PER_STRIP  = 20.0
 
-EVENT_THRESHOLD = 5.0
+EVENT_THRESHOLD = 1.5
 EVENT_BRIGHTNESS = 1.33
 
 class AudioRainbow(AbstractAnimation):
@@ -31,8 +31,9 @@ class AudioRainbow(AbstractAnimation):
             brightness = self.config.brightness
             intensity = intensities[idx]
             if intensity >= EVENT_THRESHOLD:
-                intensityModifier = EVENT_BRIGHTNESS * (1 + (intensity - EVENT_THRESHOLD)/5)
-                brightness = int(brightness * EVENT_BRIGHTNESS * intensityModifier)
+                eventIntensity = (intensity - EVENT_THRESHOLD) / 2.0
+                intensityModifier = brightness * EVENT_BRIGHTNESS * eventIntensity
+                brightness = int(brightness * intensityModifier)
                 if brightness > 31:
                     brightness = 31
 
