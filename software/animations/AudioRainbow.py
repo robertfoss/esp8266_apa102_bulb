@@ -16,11 +16,11 @@ class AudioRainbow(AbstractAnimation):
         super().__init__(config)
 
     def start(self):
-        super.start()
+        super().start()
         self.audio = AudioInput()
 
     def stop(self):
-        print("")
+        super().stop()
         self.audio.stop()
         self.audio = None
 
