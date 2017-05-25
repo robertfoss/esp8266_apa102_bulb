@@ -32,6 +32,6 @@ function updater_init()
 end
 
 function updater_start()
-  srv=net.createServer(net.TCP)
-  srv:listen(UDP_LISTEN_PORT,function(conn)
+  srv = net.createServer(net.TCP)
+  srv:listen(UDP_LISTEN_PORT, function(conn))
 end

@@ -40,7 +40,7 @@ function udp_listen_init()
 end
 
 function udp_listen_run()
-  server = net.createServer(net.UDP)
+  server = net.createUDPSocket()
   server:on("receive", receive_handler)
   server:listen(UDP_LISTEN_PORT)
 end

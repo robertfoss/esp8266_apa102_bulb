@@ -6,13 +6,12 @@ local UDP_BROADCAST_CONFIG = UDP_BROADCAST_CONFIG_HW_VER ..
 
 
 function broadcast()
-  sock = net.createConnection(net.UDP, 0)
-  sock:connect(UDP_BROADCAST_PORT, '255.255.255.255')
-  sock:send(UDP_BROADCAST_CONFIG,
-  function()
-    print('Broadcast 255.255.255.255:' .. UDP_BROADCAST_PORT)
-  end)
+  sock = net.createUDPSocket()
+  sock:send(UDP_BROADCAST_PORT,
+            '255.255.255.255',
+            UDP_BROADCAST_CONFIG)
   sock:close()
+  print('Broadcast 255.255.255.255:' .. UDP_BROADCAST_PORT)
 end
 
 function udp_broadcast_init()
