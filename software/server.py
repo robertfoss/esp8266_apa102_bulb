@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
+import os
 from ClientManager import ClientManager
 from UpdateServer import UpdateServer
 from AnimationManager import AnimationManager
