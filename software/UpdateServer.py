@@ -1,5 +1,4 @@
 import threading
-import pyinotify
 import os.path
 import time
 import asyncore
@@ -7,6 +6,9 @@ import re
 import ntpath
 import hashlib
 import Config
+import watchdog
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 from os.path import basename
 from datetime import datetime,timedelta
 from socketserver import ThreadingMixIn
@@ -126,38 +128,32 @@ class File():
     def __str__(self):
         return getBinString(self.isDev, self.version)
 
-class BinEventHandler(pyinotify.ProcessEvent):
-    def process_IN_CREATE(self, event):
-        processFile(event.pathname)
+class BinEventHandler(FileSystemEventHandler):
+    def on_created(self, event):
+        if not event.is_directory:
+            processFile(event.src_path)
 
-    def process_IN_MODIFY(self, event):
-        processFile(event.pathname)
+    def on_modified(self, event):
+        if not event.is_directory:
+            processFile(event.src_path)
 
-    def process_IN_DELETE(self, event):
-        if acceptFile(event.pathname):
-            isDev = getFileReleaseType(event.pathname)
-            version = getFileVersion(event.pathname)
+    def on_deleted(self, event):
+        if acceptFile(event.src_path):
+            isDev = getFileReleaseType(event.src_path)
+            version = getFileVersion(event.src_path)
             fileStr = getBinString(isDev, version)
             print("Firmware binary removed: %s  -- %s" % (str(binaries[fileStr]), binaries[fileStr].path))
             del binaries[fileStr]
 
-    def process_IN_ATTRIB(self, event):
-        processFile(event.pathname)
 
-
-def setupINotify():
-    events = pyinotify.IN_DELETE | pyinotify.IN_CREATE | pyinotify.IN_MODIFY | pyinotify.IN_ATTRIB
+def setupWatchdog():
     fwBinPath = Config.getPwd() + FW_BIN_PATH
     fwDevBinPath = Config.getPwd() + FW_DEV_BIN_PATH
 
-    wm = pyinotify.WatchManager()
-    eh = BinEventHandler()
-
-    wd_rel = wm.add_watch(fwBinPath, events)
-    wd_dev = wm.add_watch(fwDevBinPath, events, rec=True)
-
-    notifier = pyinotify.ThreadedNotifier(wm, eh)
-    notifier.start()
+    observer = Observer()
+    observer.schedule(BinEventHandler(), path=fwBinPath)
+    observer.schedule(BinEventHandler(), path=fwDevBinPath)
+    observer.start()
 
 def calc_md5(filename):
     hash_md5 = hashlib.md5()
@@ -330,5 +326,5 @@ class UpdateServer:
         http = HTTPServer(self.config.http_port)
         http.start()
         scanBinDirs()
-        setupINotify()
+        setupWatchdog()
 
